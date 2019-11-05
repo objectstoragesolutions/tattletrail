@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TattleTrail.DAL;
@@ -35,7 +36,7 @@ namespace TattleTrail.Controllers {
         public async Task<IActionResult> GetMonitorsAsync() {
             try {
                 var result = await _repository.GetAllMonitorsAsync();
-                return Ok(result);
+                return Ok(JsonConvert.SerializeObject(result));
             } catch(Exception ex) {
                 _logger.LogError($"Something went wrong inside GetMonitorsAsync function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
