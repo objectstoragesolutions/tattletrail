@@ -7,13 +7,13 @@ using TattleTrail.Models;
 namespace TattleTrail.DAL
 {
     public class Repository : IRepository<MonitorModel> {
-        private IConnectionMultiplexer _connectionMultiplexer;
-        private IDatabase database;
+        private readonly IConnectionMultiplexer _multiplexer;
+        private readonly IDatabase database;
 
         public Repository(IConnectionMultiplexer multiplexer) {
-            _connectionMultiplexer = multiplexer;
-            if (_connectionMultiplexer != null) {
-                database = _connectionMultiplexer.GetDatabase();
+            _multiplexer = multiplexer;
+            if (_multiplexer != null) {
+                database = _multiplexer.GetDatabase();
             }
         }
         public async Task<ActionResult<Boolean>> AddMonitorAsync(MonitorModel monitor, TimeSpan? timeSpan) {

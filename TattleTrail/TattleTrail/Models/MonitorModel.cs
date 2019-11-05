@@ -8,5 +8,7 @@ namespace TattleTrail.Models {
         }
         public String Id { get; set; }
         public String MonitorName { get; set; }
+
+        public TimeSpan LifeTime { get; set; } = TimeSpan.FromSeconds(1);
     }
 }

@@ -9,8 +9,8 @@ namespace TattleTrail.Controllers {
     [Route("api/v1/[controller]")]
     [ApiController]
     public class MonitorsController : ControllerBase, IMonitorReport {
-        private ILogger<MonitorsController> _logger;
-        private IRepository<MonitorModel> _repository;
+        private readonly ILogger<MonitorsController> _logger;
+        private readonly IRepository<MonitorModel> _repository;
         public MonitorsController(ILogger<MonitorsController> logger, IRepository<MonitorModel> repository) {
             _logger = logger;
             _repository = repository;
