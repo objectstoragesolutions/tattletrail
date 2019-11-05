@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using TattleTrail.DAL;
 using TattleTrail.DAL.RedisServerInfoProvider;
-using TattleTrail.DAL.RedisServerInfoProvider.RedisKeyValueProvider;
+using TattleTrail.DAL.RedisKeyValueProvider;
 using TattleTrail.Models;
 
 namespace TattleTrail {

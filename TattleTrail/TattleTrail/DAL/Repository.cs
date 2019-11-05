@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerInfoProvider;
-using TattleTrail.DAL.RedisServerInfoProvider.RedisKeyValueProvider;
+using TattleTrail.DAL.RedisKeyValueProvider;
 using TattleTrail.Models;
 
 namespace TattleTrail.DAL {
@@ -41,9 +41,8 @@ namespace TattleTrail.DAL {
             }
 
             IServer server = _serverProvider.GetServer(endPoint.ToString());
-            var keyValues = _keyValueProvider.GetKeyValues(server, _serverProvider.GetDatabase());
 
-            return keyValues;
+            return await Task.Run(() => _keyValueProvider.GetKeyValues(server, _serverProvider.GetDatabase()));
         }
 
         public async Task<ActionResult<RedisValue?>> GetMonitorAsync(String id) {
