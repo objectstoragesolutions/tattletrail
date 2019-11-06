@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using TattleTrail.DAL.RedisKeyValueProvider;
 
 namespace TattleTrail.Tests.DALTests.RedisKeyValueProviderTests {
     public class Builder {
+        public IRedisKeyValueProvider Build() { 
+            return new RedisKeyValueProvider();
+        }
     }
 }

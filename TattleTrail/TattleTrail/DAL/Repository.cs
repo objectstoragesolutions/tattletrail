@@ -34,13 +34,13 @@ namespace TattleTrail.DAL {
 
         public async Task<ActionResult<Dictionary<RedisKey, RedisValue>>> GetAllMonitorsAsync() {
 
-            EndPoint endPoint = _serverProvider.GetCertainEndpoint(INDEX_OF_FIRST_ENDPOINT);
+            String endPoint = _serverProvider.GetCertainEndpoint(INDEX_OF_FIRST_ENDPOINT);
 
-            if (endPoint is null) {
-                return new Dictionary<RedisKey, RedisValue>(); ;
+            if (String.IsNullOrEmpty(endPoint)) {
+                return new Dictionary<RedisKey, RedisValue>();
             }
 
-            IServer server = _serverProvider.GetServer(endPoint.ToString());
+            IServer server = _serverProvider.GetServer(endPoint);
 
             return await Task.Run(() => _keyValueProvider.GetKeyValues(server, _serverProvider.GetDatabase()));
         }

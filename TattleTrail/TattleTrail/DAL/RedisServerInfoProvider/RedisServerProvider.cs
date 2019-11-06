@@ -21,12 +21,12 @@ namespace TattleTrail.DAL.RedisServerInfoProvider {
             return _multiplexer.GetServer(host);
         }
 
-        public EndPoint? GetCertainEndpoint(int id) {
+        public String GetCertainEndpoint(int id) {
             var allEndpoints = _multiplexer.GetEndPoints();
             if (IndexOfArrayExists(allEndpoints, id)) {
-                return allEndpoints[id];
+                return allEndpoints[id].ToString();
             }
-            return null;
+            return String.Empty;
         }
 
         private Boolean IndexOfArrayExists(EndPoint[] endpoints, int indexId) {

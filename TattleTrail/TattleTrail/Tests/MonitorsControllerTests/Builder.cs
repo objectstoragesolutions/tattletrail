@@ -1,21 +1,21 @@
 ﻿using Microsoft.Extensions.Logging;
+using Moq;
 using TattleTrail.Controllers;
 using TattleTrail.DAL;
 using TattleTrail.Models;
-using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
     public class Builder {
-        private ILogger<MonitorsController> _logger;
-        private IRepository<MonitorModel> _repository;
-        public MonitorsController WithLogger(ILogger<MonitorsController> logger) {
+        private ILogger<MonitorsController> _logger = Mock.Of<ILogger<MonitorsController>>();
+        private IRepository<MonitorModel> _repository = Mock.Of<IRepository<MonitorModel>>();
+        public Builder WithLogger(ILogger<MonitorsController> logger) {
             _logger = logger;
-            return Build();
+            return this;
         }
 
-        public MonitorsController WithRepository(IRepository<MonitorModel> repository) {
+        public Builder WithRepository(IRepository<MonitorModel> repository) {
             _repository = repository;
-            return Build();
+            return this;
         }
 
         public MonitorsController Build() {
