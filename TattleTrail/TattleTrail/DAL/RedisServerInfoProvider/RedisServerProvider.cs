@@ -7,10 +7,7 @@ namespace TattleTrail.DAL.RedisServerInfoProvider {
         private readonly IConnectionMultiplexer _multiplexer;
 
         public RedisServerProvider(IConnectionMultiplexer multiplexer) {
-            if (multiplexer is null) {
-                throw new ArgumentNullException(nameof(multiplexer));
-            }
-            _multiplexer = multiplexer;
+            _multiplexer = multiplexer ?? throw new ArgumentNullException(nameof(multiplexer)); ;
         }
 
         public IDatabase GetDatabase() {

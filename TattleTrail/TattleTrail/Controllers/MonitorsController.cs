@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TattleTrail.DAL;
+using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 
 namespace TattleTrail.Controllers {
@@ -12,9 +13,11 @@ namespace TattleTrail.Controllers {
     public class MonitorsController : ControllerBase, IMonitorReport {
         private readonly ILogger<MonitorsController> _logger;
         private readonly IRepository<MonitorModel> _repository;
-        public MonitorsController(ILogger<MonitorsController> logger, IRepository<MonitorModel> repository) {
-            _logger = logger;
-            _repository = repository;
+        private readonly IBaseModelFactory<MonitorModel> _modelFactory;
+        public MonitorsController(ILogger<MonitorsController> logger, IRepository<MonitorModel> repository, IBaseModelFactory<MonitorModel> modelFactory) {
+            _logger = logger ?? throw new ArgumentNullException(nameof(MonitorsController));
+            _repository = repository ?? throw new ArgumentNullException(nameof(MonitorsController));
+            _modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(MonitorsController));
         }
 
         [HttpGet("{id}")]
@@ -37,7 +40,7 @@ namespace TattleTrail.Controllers {
             try {
                 var result = await _repository.GetAllMonitorsAsync();
                 return Ok(JsonConvert.SerializeObject(result));
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside GetMonitorsAsync function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
@@ -46,7 +49,7 @@ namespace TattleTrail.Controllers {
         [HttpPost]
         public async Task<IActionResult> CreateMonitorAsync(MonitorModel monitor) {
             try {
-                var result = await _repository.AddMonitorAsync(monitor, null);
+                var result = await _repository.AddMonitorAsync(monitor);
                 if (result.Value) {
                     return Ok();
                 }
@@ -55,7 +58,7 @@ namespace TattleTrail.Controllers {
                 _logger.LogError($"Something went wrong inside CreateMonitorAsync function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
-            
+
         }
 
         [HttpDelete("{id}")]
@@ -70,25 +73,26 @@ namespace TattleTrail.Controllers {
                 _logger.LogError($"Something went wrong inside DeleteMonitorAsync function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
-            
+
         }
 
         [HttpPost("{id}/report")]
-        public async Task<ActionResult<string>> SetProcessStatus(String id, double minutes) {
+        public async Task<ActionResult<string>> SetProcessStatus(String id, [FromBody] double minutes) {
             try {
                 var monitor = await _repository.GetMonitorAsync(id);
                 if (!monitor.Value.HasValue) {
                     return NotFound();
                 }
                 var lifeTime = TimeSpan.FromMinutes(minutes);
-                var result = await _repository.AddMonitorAsync(new MonitorModel(id, monitor.Value.ToString()), lifeTime);
+                var modelToAdd = _modelFactory.Create(id, monitor.Value.ToString(), lifeTime);
+                var result = await _repository.AddMonitorAsync(modelToAdd);
 
                 return Ok();
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
-            
+
         }
 
     }

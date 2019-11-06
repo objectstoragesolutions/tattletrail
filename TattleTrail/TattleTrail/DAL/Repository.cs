@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
-using TattleTrail.DAL.RedisServerInfoProvider;
 using TattleTrail.DAL.RedisKeyValueProvider;
+using TattleTrail.DAL.RedisServerInfoProvider;
 using TattleTrail.Models;
 
 namespace TattleTrail.DAL {
@@ -15,17 +15,11 @@ namespace TattleTrail.DAL {
         private readonly IRedisKeyValueProvider _keyValueProvider;
 
         public Repository(IRedisServerProvider serverProvider, IRedisKeyValueProvider keyValueProvider) {
-            if (serverProvider is null) {
-                throw new ArgumentNullException(nameof(serverProvider));
-            }
-            if (keyValueProvider is null) {
-                throw new ArgumentNullException(nameof(keyValueProvider));
-            }
-            _serverProvider = serverProvider;
-            _keyValueProvider = keyValueProvider;
+            _serverProvider = serverProvider ?? throw new ArgumentNullException(nameof(serverProvider)); ;
+            _keyValueProvider = keyValueProvider ?? throw new ArgumentNullException(nameof(serverProvider)); ;
         }
-        public async Task<ActionResult<Boolean>> AddMonitorAsync(MonitorModel monitor, TimeSpan? timeSpan) {
-            return await _serverProvider.GetDatabase().StringSetAsync(monitor.Id, monitor.MonitorName, timeSpan);
+        public async Task<ActionResult<Boolean>> AddMonitorAsync(MonitorModel monitor) {
+            return await _serverProvider.GetDatabase().StringSetAsync(Guid.NewGuid().ToByteArray(), JsonConvert.SerializeObject(monitor));
         }
 
         public async Task<ActionResult<Boolean>> DeleteMonitorAsync(String monitorId) {

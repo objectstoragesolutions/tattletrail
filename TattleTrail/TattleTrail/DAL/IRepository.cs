@@ -9,7 +9,7 @@ namespace TattleTrail.DAL {
 
         Task<ActionResult<Dictionary<RedisKey, RedisValue>>> GetAllMonitorsAsync();
         Task<ActionResult<RedisValue?>> GetMonitorAsync(String id);
-        Task<ActionResult<Boolean>> AddMonitorAsync(TEntity monitor, TimeSpan? timeSpan);
+        Task<ActionResult<Boolean>> AddMonitorAsync(TEntity monitor);
         Task<ActionResult<Boolean>> DeleteMonitorAsync(String monitorId);
 
     }
