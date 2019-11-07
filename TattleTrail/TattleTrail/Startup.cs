@@ -21,7 +21,7 @@ namespace TattleTrail {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddScoped<IRepository, Repository>();
-            services.AddScoped<IBaseModelFactory<MonitorProcess>, MonitorModelFactory>();
+            services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
             services.AddSingleton<IRedisServerProvider, RedisServerProvider>();
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
             services.AddControllers();

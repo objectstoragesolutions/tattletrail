@@ -14,8 +14,8 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
 
         Establish _context = () => {
             Fixture fixture = new Fixture();
-            Id = fixture.Create<string>();
-            _repository = Mock.Of<IRepository>(x => x.GetMonitorAsync(Guid.Parse(Id)) == null);
+            Id = fixture.Create<Guid>();
+            _repository = Mock.Of<IRepository>(x => x.GetMonitorAsync(Id) == null);
             _controller = new Builder().WithRepository(_repository).Build();
         };
 
@@ -23,10 +23,10 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
             _result = _controller.GetMonitorAsync(Id);
 
         It should_return_not_found_result = () =>
-            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Guid.Parse(Id)), Times.Once);
+            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Id), Times.Once);
 
         static MonitorsController _controller;
-        static String Id;
+        static Guid Id;
         static IRepository _repository;
         static Task<IActionResult> _result;
     }

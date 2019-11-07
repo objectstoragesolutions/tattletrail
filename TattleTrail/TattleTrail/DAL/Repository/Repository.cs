@@ -1,7 +1,6 @@
 ﻿
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.Infrastructure.Extensions;
@@ -20,7 +19,7 @@ namespace TattleTrail.DAL.Repository {
         }
 
         public async Task AddMonitorAsync(MonitorProcess monitor) {
-            await _dataProvider.Database.HashSetAsync(Guid.NewGuid().ToByteArray(), monitor.ConvertMonitorToHashEntry());
+            await _dataProvider.Database.HashSetAsync(monitor.Id.ToString(), monitor.ConvertMonitorToHashEntry());
         }
 
         public async Task DeleteMonitorAsync(Guid monitorId) {
@@ -28,11 +27,11 @@ namespace TattleTrail.DAL.Repository {
         }
 
         public async Task<HashEntry[]> GetMonitorAsync(Guid monitorId) {
-            return await _dataProvider.Database.HashGetAllAsync(monitorId.ToByteArray());
+            return await _dataProvider.Database.HashGetAllAsync(monitorId.ToString());
         }
 
-        public async Task<RedisValue> GetUserAsync(Guid userId) {
-            return await _dataProvider.Database.HashGetAsync(userId.ToByteArray(), "*");
+        public async Task<RedisValue> GetUserAsync(String userId) {
+            return await _dataProvider.Database.HashGetAsync(userId, "*");
         }
 
         public async Task CreateUserAsync(User user) {
