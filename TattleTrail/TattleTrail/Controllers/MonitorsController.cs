@@ -12,9 +12,9 @@ namespace TattleTrail.Controllers {
     [ApiController]
     public class MonitorsController : ControllerBase, IMonitorReport {
         private readonly ILogger<MonitorsController> _logger;
-        private readonly IRepository<MonitorModel> _repository;
-        private readonly IBaseModelFactory<MonitorModel> _modelFactory;
-        public MonitorsController(ILogger<MonitorsController> logger, IRepository<MonitorModel> repository, IBaseModelFactory<MonitorModel> modelFactory) {
+        private readonly IRepository<Monitor> _repository;
+        private readonly IBaseModelFactory<Monitor> _modelFactory;
+        public MonitorsController(ILogger<MonitorsController> logger, IRepository<Monitor> repository, IBaseModelFactory<Monitor> modelFactory) {
             _logger = logger ?? throw new ArgumentNullException(nameof(MonitorsController));
             _repository = repository ?? throw new ArgumentNullException(nameof(MonitorsController));
             _modelFactory = modelFactory ?? throw new ArgumentNullException(nameof(MonitorsController));
@@ -47,7 +47,7 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMonitorAsync(MonitorModel monitor) {
+        public async Task<IActionResult> CreateMonitorAsync(Monitor monitor) {
             try {
                 var result = await _repository.AddMonitorAsync(monitor);
                 if (result.Value) {
@@ -84,7 +84,7 @@ namespace TattleTrail.Controllers {
                     return NotFound();
                 }
                 var lifeTime = TimeSpan.FromMinutes(minutes);
-                var modelToAdd = _modelFactory.Create(id, monitor.Value.ToString(), lifeTime);
+                var modelToAdd = _modelFactory.Create(Guid.Parse(id), monitor.Value.ToString(), lifeTime);
                 var result = await _repository.AddMonitorAsync(modelToAdd);
 
                 return Ok();

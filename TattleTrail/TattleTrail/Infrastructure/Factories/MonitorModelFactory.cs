@@ -2,9 +2,9 @@
 using TattleTrail.Models;
 
 namespace TattleTrail.Infrastructure.Factories {
-    public class MonitorModelFactory : IBaseModelFactory<MonitorModel> {
-        public MonitorModel Create(String id, String name, TimeSpan lifeTime) {
-            return new MonitorModel() { Id = id, MonitorName = name , LifeTime = lifeTime.ToString()};
+    public class MonitorModelFactory : IBaseModelFactory<Monitor> {
+        public Monitor Create(Guid id, String name, TimeSpan lifeTime) {
+            return new Monitor() { Id = id, ProcessName = name , LifeTime = lifeTime};
         }
     }
 }

@@ -15,7 +15,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             Id = fixture.Create<string>();
-            _repository = Mock.Of<IRepository<MonitorModel>>();
+            _repository = Mock.Of<IRepository<Monitor>>();
             _controller = new Builder().WithRepository(_repository).Build();
         };
 
@@ -27,7 +27,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
 
         static MonitorsController _controller;
         static String Id;
-        static IRepository<MonitorModel> _repository;
+        static IRepository<Monitor> _repository;
         static Task<IActionResult> _result;
     }
 }

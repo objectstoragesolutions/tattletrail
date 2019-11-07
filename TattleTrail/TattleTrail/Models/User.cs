@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 
 namespace TattleTrail.Models {
-    public class UsersModel {
+    public class User {
+
+        public Guid Id { get; set; }
         public String UserName { get; set; }
-        public HashSet<String> MonitorIds { get; set; }
+        public HashSet<Guid> MonitorIds { get; set; }
     }
 }
