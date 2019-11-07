@@ -8,19 +8,19 @@ using TattleTrail.Models;
 namespace TattleTrail.Tests.MonitorsControllerTests {
     public class Builder {
         private ILogger<MonitorsController> _logger = Mock.Of<ILogger<MonitorsController>>();
-        private IRepository<Monitor> _repository = Mock.Of<IRepository<Monitor>>();
-        private IBaseModelFactory<Monitor> _factoryModel = Mock.Of<IBaseModelFactory<Monitor>>();
+        private IRepository _repository = Mock.Of<IRepository>();
+        private IBaseModelFactory<MonitorProcess> _factoryModel = Mock.Of<IBaseModelFactory<MonitorProcess>>();
         public Builder WithLogger(ILogger<MonitorsController> logger) {
             _logger = logger;
             return this;
         }
 
-        public Builder WithRepository(IRepository<Monitor> repository) {
+        public Builder WithRepository(IRepository repository) {
             _repository = repository;
             return this;
         }
 
-        public Builder WithModelFactory(IBaseModelFactory<Monitor> modelFactory) {
+        public Builder WithModelFactory(IBaseModelFactory<MonitorProcess> modelFactory) {
             _factoryModel = modelFactory;
             return this;
         }

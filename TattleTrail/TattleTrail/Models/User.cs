@@ -6,6 +6,6 @@ namespace TattleTrail.Models {
 
         public Guid Id { get; set; }
         public String UserName { get; set; }
-        public HashSet<Guid> MonitorIds { get; set; }
+        public HashSet<Guid> MonitorProcessId { get; set; }
     }
 }

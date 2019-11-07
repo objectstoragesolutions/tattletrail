@@ -6,7 +6,6 @@ using System;
 using System.Threading.Tasks;
 using TattleTrail.Controllers;
 using TattleTrail.DAL;
-using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
@@ -15,7 +14,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             Id = fixture.Create<string>();
-            _repository = Mock.Of<IRepository<Monitor>>();
+            _repository = Mock.Of<IRepository>();
             _controller = new Builder().WithRepository(_repository).Build();
         };
 
@@ -23,11 +22,11 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
             _result = _controller.GetMonitorAsync(Id);
 
         It should_get_monitor_by_id = () => 
-            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Id), Times.Once);
+            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Guid.Parse(Id)), Times.Once);
 
         static MonitorsController _controller;
         static String Id;
-        static IRepository<Monitor> _repository;
+        static IRepository _repository;
         static Task<IActionResult> _result;
     }
 }

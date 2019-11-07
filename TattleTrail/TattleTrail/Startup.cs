@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
-using TattleTrail.DAL;
-using TattleTrail.DAL.RedisServerInfoProvider;
-using TattleTrail.DAL.RedisDataProvider;
 using TattleTrail.Models;
 using TattleTrail.Infrastructure.Factories;
+using TattleTrail.DAL;
+using TattleTrail.DAL.Repository;
+using TattleTrail.DAL.RedisServerProvider;
 
 namespace TattleTrail {
     public class Startup {
@@ -20,9 +20,8 @@ namespace TattleTrail {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddScoped<IRepository<Monitor>, Repository>();
-            services.AddScoped<IBaseModelFactory<Monitor>, MonitorModelFactory>();
-            services.AddSingleton<IRedisDataProvider, RedisDataProvider>();
+            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IBaseModelFactory<MonitorProcess>, MonitorModelFactory>();
             services.AddSingleton<IRedisServerProvider, RedisServerProvider>();
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
             services.AddControllers();

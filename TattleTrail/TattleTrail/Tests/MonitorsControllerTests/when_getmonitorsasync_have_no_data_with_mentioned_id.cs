@@ -6,18 +6,16 @@ using System;
 using System.Threading.Tasks;
 using TattleTrail.Controllers;
 using TattleTrail.DAL;
-using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
     [Subject(typeof(MonitorsController))]
-    [Ignore("Will rework soon")]
     public class when_getmonitorsasync_have_no_data_with_mentioned_id {
 
         Establish _context = () => {
             Fixture fixture = new Fixture();
             Id = fixture.Create<string>();
-            _repository = Mock.Of<IRepository<Monitor>>(x => x.GetMonitorAsync(Id) == null);
+            _repository = Mock.Of<IRepository>(x => x.GetMonitorAsync(Guid.Parse(Id)) == null);
             _controller = new Builder().WithRepository(_repository).Build();
         };
 
@@ -25,11 +23,11 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
             _result = _controller.GetMonitorAsync(Id);
 
         It should_return_not_found_result = () =>
-            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Id), Times.Once);
+            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Guid.Parse(Id)), Times.Once);
 
         static MonitorsController _controller;
         static String Id;
-        static IRepository<Monitor> _repository;
+        static IRepository _repository;
         static Task<IActionResult> _result;
     }
 }
