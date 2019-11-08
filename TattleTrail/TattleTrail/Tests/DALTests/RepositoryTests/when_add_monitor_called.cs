@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Moq;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
 using TattleTrail.Models;
@@ -18,7 +17,7 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests {
             monitor = Mock.Of<MonitorProcess>(x => x.Id == Guid.NewGuid() && 
                         x.ProcessName == name && 
                         x.LifeTime == fixture.Create<int>() &&
-                        x.Subscribers == new HashSet<String>());
+                        x.Subscribers == new String[] { });
             database = Mock.Of<IDatabase>();
             provider = Mock.Of<IRedisServerProvider>(x => x.Database == database);
             repository = new Builder()

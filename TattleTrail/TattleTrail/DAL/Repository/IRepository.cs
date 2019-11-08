@@ -9,9 +9,7 @@ namespace TattleTrail.DAL {
         Task<RedisValue> GetUserAsync(String userId);
         Task CreateUserAsync(User user);
         Task AddMonitorAsync(MonitorProcess monitor);
-
         Task DeleteMonitorAsync(Guid monitorId);
-
-        Task<HashEntry[]> GetMonitorAsync(Guid monitorId);
+        Task<MonitorProcess> GetMonitorAsync(Guid monitorId);
     }
 }

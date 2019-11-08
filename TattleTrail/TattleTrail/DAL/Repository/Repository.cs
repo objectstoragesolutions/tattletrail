@@ -1,6 +1,8 @@
 ﻿
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.Infrastructure.Extensions;
@@ -26,8 +28,12 @@ namespace TattleTrail.DAL.Repository {
             await _dataProvider.Database.KeyDeleteAsync(monitorId.ToByteArray());
         }
 
-        public async Task<HashEntry[]> GetMonitorAsync(Guid monitorId) {
-            return await _dataProvider.Database.HashGetAllAsync(monitorId.ToString());
+        public async Task<MonitorProcess> GetMonitorAsync(Guid monitorId) {
+            HashEntry[] monitorData = await GetHashEntryArrayByKey(monitorId.ToString());
+            if (monitorData.Length.Equals(0)) {
+                return new MonitorProcess();
+            }
+            return monitorData.AsMonitorProcess(monitorId);
         }
 
         public async Task<RedisValue> GetUserAsync(String userId) {
@@ -36,6 +42,10 @@ namespace TattleTrail.DAL.Repository {
 
         public async Task CreateUserAsync(User user) {
             await _dataProvider.Database.HashSetAsync(Guid.NewGuid().ToByteArray(), user.ConvertUserToHashEntry());
+        }
+
+        private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
+            return await _dataProvider.Database.HashGetAllAsync(redisKey);
         }
     }
 }

@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Moq;
 using System;
-using System.Collections.Generic;
 using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
@@ -14,7 +13,7 @@ namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests {
             Fixture fixture = new Fixture();
             processName = fixture.Create<String>();
             intervalTime = fixture.Create<int>();
-            subscribers = fixture.Create<HashSet<string>>();
+            subscribers = new string[] { };//fixture.Create<string[]>();
             factory = Mock.Of<MonitorModelFactory>();
         };
         Because of = () => 
@@ -29,7 +28,7 @@ namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests {
         static MonitorProcess result;
         static String processName;
         static int intervalTime;
-        static HashSet<string> subscribers;
+        static string[] subscribers;
         static MonitorModelFactory factory;
     }
 }

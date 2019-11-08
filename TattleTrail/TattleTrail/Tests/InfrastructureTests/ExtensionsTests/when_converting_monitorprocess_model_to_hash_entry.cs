@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Moq;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using TattleTrail.Infrastructure.Extensions;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
@@ -14,13 +13,11 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests {
 
         Establish _context = () => {
             Fixture fixture = new Fixture();
-            var lifeTime = fixture.Create<int>();
-            var processName = fixture.Create<String>();
             monitor = Mock.Of<MonitorProcess>(
                 x => x.Id == Guid.NewGuid() && 
-                x.LifeTime == lifeTime && 
-                x.ProcessName == processName && 
-                x.Subscribers == new HashSet<string>());
+                x.LifeTime == fixture.Create<int>() && 
+                x.ProcessName == fixture.Create<String>() && 
+                x.Subscribers == fixture.Create<String[]>());
         };
 
         Because of = () => 

@@ -24,9 +24,6 @@ namespace TattleTrail.Controllers {
         public async Task<IActionResult> GetMonitorAsync(Guid id) {
             try {
                 var result = await _repository.GetMonitorAsync(id);
-                if (result is null) {
-                    return NotFound();
-                }
                 return Ok(result);
 
             } catch (Exception ex) {
@@ -47,13 +44,9 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMonitorAsync() { 
-            //String monitorName,
-            //Int32 interval, 
-            //HashSet<String> subscribers) {
+        public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) { 
             try {
-                //TODO: Rework create logic
-                var monitor = _monitorModelFactory.Create("monitorName", 100, new HashSet<string>());
+                var monitor = _monitorModelFactory.Create(details.ProcessName, details.LifeTime, details.Subscribers);
                 await _repository.AddMonitorAsync(monitor);
                 return Ok();
             } catch (Exception ex) {

@@ -1,4 +1,5 @@
-﻿using StackExchange.Redis;
+﻿using Newtonsoft.Json;
+using StackExchange.Redis;
 using TattleTrail.Models;
 
 namespace TattleTrail.Infrastructure.Extensions {
@@ -6,7 +7,7 @@ namespace TattleTrail.Infrastructure.Extensions {
         public static HashEntry[] ConvertMonitorToHashEntry(this MonitorProcess monitor) {
             var processName = new HashEntry(nameof(monitor.ProcessName), monitor.ProcessName);
             var lifeTime = new HashEntry(nameof(monitor.LifeTime), monitor.LifeTime);
-            var subscribers = new HashEntry(nameof(monitor.Subscribers), monitor.Subscribers.ToString());
+            var subscribers = new HashEntry(nameof(monitor.Subscribers), JsonConvert.SerializeObject(monitor.Subscribers));
 
             return new HashEntry[] { processName, lifeTime, subscribers };
 
