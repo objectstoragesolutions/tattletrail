@@ -25,7 +25,7 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests {
             await repository.DeleteMonitorAsync(monitor.Id);
 
         It should_call_hashgetallasync_once = () =>
-            Mock.Get(provider).Verify(x => x.Database.KeyDeleteAsync(monitor.Id.ToByteArray(), CommandFlags.None), Times.Once);
+            Mock.Get(provider).Verify(x => x.Database.KeyDeleteAsync(monitor.Id.ToString(), CommandFlags.None), Times.Once);
 
         static IRedisServerProvider provider;
         static IDatabase database;

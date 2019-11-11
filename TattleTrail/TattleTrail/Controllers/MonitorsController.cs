@@ -47,8 +47,11 @@ namespace TattleTrail.Controllers {
         public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) { 
             try {
                 var monitor = _monitorModelFactory.Create(details.ProcessName, details.LifeTime, details.Subscribers);
-                await _repository.AddMonitorAsync(monitor);
-                return Ok();
+                var result = await _repository.CreateMonitorAsync(monitor);
+                if (result) {
+                    return Ok();
+                }
+                return StatusCode(500, "Internal server error.");
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside CreateMonitorAsync function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
@@ -56,9 +59,9 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMonitorAsync(String id) {
+        public async Task<IActionResult> DeleteMonitorAsync(Guid id) {
             try {
-                await _repository.DeleteMonitorAsync(Guid.Parse(id));
+                await _repository.DeleteMonitorAsync(id);
                 return Ok();
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside DeleteMonitorAsync function: {ex.Message}");
@@ -67,14 +70,13 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpPost("{id}/report")]
-        public async Task<ActionResult<string>> ReportProcessStatus(Guid id) {
+        public async Task<IActionResult> ReportProcessStatus(Guid id) {
             try {
-                //TODO: implement report logic
                 var monitor = await _repository.GetMonitorAsync(id);
-                if (monitor is null) {
+                if (monitor.Id.Equals(Guid.Empty)) {
                     return NotFound();
                 }
-                return Ok();
+                return Ok(monitor);
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");

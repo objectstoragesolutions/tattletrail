@@ -4,8 +4,7 @@ using System.Collections.Generic;
 namespace TattleTrail.Models {
     public class MonitorProcess {
         public Guid Id { get; set; }
-        public String ProcessName { get; set; }
-        public Int32 LifeTime { get; set; }
-        public String[] Subscribers { get; set; }
+
+        public MonitorDetails MonitorDetails { get; set; } = new MonitorDetails();
     }
 }

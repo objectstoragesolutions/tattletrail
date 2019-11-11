@@ -1,6 +1,4 @@
-﻿
-using Newtonsoft.Json;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,16 +14,25 @@ namespace TattleTrail.DAL.Repository {
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
         }
 
-        public async Task<HashEntry[]> GetAllMonitors() {
-            return await _dataProvider.Database.HashGetAllAsync("*");
+        public async Task<HashSet<MonitorProcess>> GetAllMonitors() {
+            HashSet<MonitorProcess> monitors = new HashSet<MonitorProcess>();
+
+            var hashKeys = GetAllHashKeysAsync();
+            
+            foreach (var key in hashKeys) {
+                monitors.Add(await GetMonitorAsync(key));
+            }
+
+            return monitors;
         }
 
-        public async Task AddMonitorAsync(MonitorProcess monitor) {
+        public async Task<Boolean> CreateMonitorAsync(MonitorProcess monitor) {
             await _dataProvider.Database.HashSetAsync(monitor.Id.ToString(), monitor.ConvertMonitorToHashEntry());
+            return await _dataProvider.Database.KeyExpireAsync(monitor.Id.ToString(), TimeSpan.FromSeconds(monitor.MonitorDetails.LifeTime));
         }
 
         public async Task DeleteMonitorAsync(Guid monitorId) {
-            await _dataProvider.Database.KeyDeleteAsync(monitorId.ToByteArray());
+            await _dataProvider.Database.KeyDeleteAsync(monitorId.ToString());
         }
 
         public async Task<MonitorProcess> GetMonitorAsync(Guid monitorId) {
@@ -46,6 +53,18 @@ namespace TattleTrail.DAL.Repository {
 
         private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
             return await _dataProvider.Database.HashGetAllAsync(redisKey);
+        }
+
+        private HashSet<Guid> GetAllHashKeysAsync() {
+            HashSet<Guid> hashKeys = new HashSet<Guid>();
+            IEnumerable<RedisKey> allHashKeys = _dataProvider.Server.Keys(pattern: "*");
+            foreach (var key in allHashKeys) {
+                bool isValidGuid = Guid.TryParse(key, out var guidOutput);
+                if (isValidGuid) {
+                    hashKeys.Add(guidOutput);
+                }
+            }
+            return hashKeys;
         }
     }
 }

@@ -20,9 +20,9 @@ namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests {
             result = factory.Create(processName, intervalTime, subscribers);
 
         It should_create_monitor_process = () => {
-            result.ProcessName.Equals(processName);
-            result.LifeTime.Equals(intervalTime);
-            result.Subscribers.Equals(subscribers);
+            result.MonitorDetails.ProcessName.Equals(processName);
+            result.MonitorDetails.LifeTime.Equals(intervalTime);
+            result.MonitorDetails.Subscribers.Equals(subscribers);
         };
 
         static MonitorProcess result;
