@@ -7,6 +7,7 @@ using TattleTrail.Models;
 namespace TattleTrail.DAL {
     public interface IRepository {
         Task<HashSet<MonitorProcess>> GetAllMonitors();
+        HashSet<Guid> GetAllHashKeysAsync();
         Task<RedisValue> GetUserAsync(String userId);
         Task CreateUserAsync(User user);
         Task<Boolean> CreateMonitorAsync(MonitorProcess monitor);

@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests {
     [Subject(typeof(Repository))]
-    public class when_get_all_monitors_called {
+    public class when_getallmonitors_called {
         Establish _context = () => {
             Fixture fixture = new Fixture(); 
             guidKey = fixture.Create<Guid>();
@@ -21,8 +21,8 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests {
             server = Mock.Of<IServer>(x => x.Keys(0, "*", 10, 0, 0, CommandFlags.None) == new HashSet<RedisKey> { $"{guidKey}"});
             provider = Mock.Of<IRedisServerProvider>(x => x.Database == database && x.Server == server);
             repository = new Builder()
-            .WithRedisServerProvider(provider)
-            .Build();
+                .WithRedisServerProvider(provider)
+                .Build();
         };
         Because of = async () =>
             result = await repository.GetAllMonitors();
@@ -34,7 +34,7 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests {
             Mock.Get(provider).Verify(x => x.Database.HashGetAllAsync(guidKey.ToString(), CommandFlags.None), Times.Once);
 
         It should_contain_proper_result = () =>
-            result.Count.Equals(1);
+            result.Count.ShouldEqual(1);
 
         static IRedisServerProvider provider;
         static IDatabase database;

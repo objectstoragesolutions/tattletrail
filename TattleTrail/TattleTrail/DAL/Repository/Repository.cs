@@ -26,6 +26,18 @@ namespace TattleTrail.DAL.Repository {
             return monitors;
         }
 
+        public HashSet<Guid> GetAllHashKeysAsync() {
+            HashSet<Guid> hashKeys = new HashSet<Guid>();
+            IEnumerable<RedisKey> allHashKeys = _dataProvider.Server.Keys(pattern: "*");
+            foreach (var key in allHashKeys) {
+                bool isValidGuid = Guid.TryParse(key, out var guidOutput);
+                if (isValidGuid) {
+                    hashKeys.Add(guidOutput);
+                }
+            }
+            return hashKeys;
+        }
+
         public async Task<Boolean> CreateMonitorAsync(MonitorProcess monitor) {
             await _dataProvider.Database.HashSetAsync(monitor.Id.ToString(), monitor.ConvertMonitorToHashEntry());
             return await _dataProvider.Database.KeyExpireAsync(monitor.Id.ToString(), TimeSpan.FromSeconds(monitor.MonitorDetails.LifeTime));
@@ -53,18 +65,6 @@ namespace TattleTrail.DAL.Repository {
 
         private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
             return await _dataProvider.Database.HashGetAllAsync(redisKey);
-        }
-
-        private HashSet<Guid> GetAllHashKeysAsync() {
-            HashSet<Guid> hashKeys = new HashSet<Guid>();
-            IEnumerable<RedisKey> allHashKeys = _dataProvider.Server.Keys(pattern: "*");
-            foreach (var key in allHashKeys) {
-                bool isValidGuid = Guid.TryParse(key, out var guidOutput);
-                if (isValidGuid) {
-                    hashKeys.Add(guidOutput);
-                }
-            }
-            return hashKeys;
         }
     }
 }

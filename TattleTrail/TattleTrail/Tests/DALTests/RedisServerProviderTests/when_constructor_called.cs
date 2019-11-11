@@ -28,10 +28,10 @@ namespace TattleTrail.Tests.DALTests.RedisServerProviderTests {
             Mock.Get(multiplexer).Verify(x => x.GetDatabase(-1, null), Times.Once);
 
         It should_set_server_as_property = () => 
-            provider.Server.Equals(server);
+            provider.Server.ShouldEqual(server);
 
         It should_set_database_as_property = () => 
-            provider.Database.Equals(dataBase);
+            provider.Database.ShouldEqual(dataBase);
 
         static IRedisServerProvider provider;
         static IServer server;

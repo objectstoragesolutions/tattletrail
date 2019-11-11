@@ -24,22 +24,22 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests {
             result = user.ConvertUserToHashEntry();
 
         It should_contain_userid_field_name = () =>
-            result[0].Name.Equals(nameof(user.Id));
+            result[0].Name.ShouldEqual((RedisValue) nameof(user.Id));
 
         It should_contain_userid_field_value = () =>
-            result[0].Value.Equals(user.Id.ToByteArray());
+            result[0].Value.ShouldEqual((RedisValue) user.Id.ToString());
 
         It should_contain_username_field_name = () =>
-            result[1].Name.Equals(nameof(user.UserName));
+            result[1].Name.ShouldEqual((RedisValue)nameof(user.UserName));
 
         It should_contain_username_field_value = () =>
-            result[1].Value.Equals(user.UserName);
+            result[1].Value.ShouldEqual((RedisValue) user.UserName);
 
         It should_contain_processid_field_name = () =>
-             result[2].Name.Equals(nameof(user.MonitorProcessId));
+             result[2].Name.ShouldEqual((RedisValue) nameof(user.MonitorProcessId));
 
         It should_contain_processid_field_value = () =>
-             result[2].Value.Equals(user.MonitorProcessId);
+             result[2].Value.ShouldEqual((RedisValue) user.MonitorProcessId.ToString());
 
         static User user;
         static HashEntry[] result;

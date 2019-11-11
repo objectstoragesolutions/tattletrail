@@ -1,20 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using TattleTrail.Models;
 
 namespace TattleTrail.Infrastructure.Factories {
     public class MonitorModelFactory : IMonitorModelFactory {
-        public MonitorProcess Create(String processName, Int32 intervalTime, String[] subscribers) {
+
+        private readonly IMonitorDetailsFactory _monitorDetailsFactory;
+
+        public MonitorModelFactory(IMonitorDetailsFactory factory) {
+            _monitorDetailsFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+        }
+
+        public MonitorProcess Create(MonitorDetails monitorDetails) {
             return new MonitorProcess() { 
                 Id = Guid.NewGuid(),
-                MonitorDetails = new MonitorDetails() { ProcessName = processName, LifeTime = intervalTime, Subscribers = subscribers }
+                MonitorDetails = _monitorDetailsFactory.Create(monitorDetails)
             };
         }
 
-        public MonitorProcess Create(Guid id, String processName, Int32 intervalTime, String[] subscribers) {
+        public MonitorProcess Create(Guid id, MonitorDetails monitorDetails) {
             return new MonitorProcess() {
                 Id = id,
-                MonitorDetails = new MonitorDetails() { ProcessName = processName, LifeTime = intervalTime, Subscribers = subscribers }
+                MonitorDetails = _monitorDetailsFactory.Create(monitorDetails)
             };
         }
     }

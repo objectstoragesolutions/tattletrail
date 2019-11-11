@@ -8,6 +8,7 @@ using TattleTrail.DAL.Repository;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests {
+    [Subject(typeof(Repository))]
     public class when_getuserasync_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();

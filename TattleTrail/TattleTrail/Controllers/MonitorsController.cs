@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TattleTrail.DAL;
 using TattleTrail.Infrastructure.Factories;
@@ -20,10 +19,25 @@ namespace TattleTrail.Controllers {
             _monitorModelFactory = modelFactory ?? throw new ArgumentNullException(nameof(MonitorsController));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetMonitorsAsync() {
+            try {
+                var result = await _repository.GetAllMonitors();
+
+                return Ok(result);
+            } catch (Exception ex) {
+                _logger.LogError($"Something went wrong inside GetMonitorsAsync function: {ex.Message}");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMonitorAsync(Guid id) {
             try {
                 var result = await _repository.GetMonitorAsync(id);
+                if (result.Id.Equals(Guid.Empty)) {
+                    return NotFound();
+                }
                 return Ok(result);
 
             } catch (Exception ex) {
@@ -32,21 +46,10 @@ namespace TattleTrail.Controllers {
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMonitorsAsync() {
-            try {
-                var result = await _repository.GetAllMonitors();
-                return Ok(result);
-            } catch (Exception ex) {
-                _logger.LogError($"Something went wrong inside GetMonitorsAsync function: {ex.Message}");
-                return StatusCode(500, "Internal server error.");
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) { 
             try {
-                var monitor = _monitorModelFactory.Create(details.ProcessName, details.LifeTime, details.Subscribers);
+                var monitor = _monitorModelFactory.Create(details);
                 var result = await _repository.CreateMonitorAsync(monitor);
                 if (result) {
                     return Ok();

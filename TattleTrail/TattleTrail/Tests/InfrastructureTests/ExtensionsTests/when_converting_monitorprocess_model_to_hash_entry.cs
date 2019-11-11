@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using Machine.Specifications;
 using Moq;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using TattleTrail.Infrastructure.Extensions;
@@ -26,22 +27,22 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests {
             result = monitor.ConvertMonitorToHashEntry();
 
         It should_contain_process_field_name = () =>
-            result[0].Name.Equals(nameof(monitor.MonitorDetails.ProcessName));
+            result[0].Name.ShouldEqual((RedisValue)nameof(monitor.MonitorDetails.ProcessName));
 
         It should_contain_process_field_value = () =>
-            result[0].Value.Equals(monitor.MonitorDetails.ProcessName);
+            result[0].Value.ShouldEqual((RedisValue)monitor.MonitorDetails.ProcessName);
 
         It should_contain_lifeTime_field_name = () => 
-            result[1].Name.Equals(nameof(monitor.MonitorDetails.LifeTime));
+            result[1].Name.ShouldEqual((RedisValue)nameof(monitor.MonitorDetails.LifeTime));
 
         It should_contain_lifeTime_field_value = () =>
-            result[1].Value.Equals(monitor.MonitorDetails.LifeTime);
+            result[1].Value.ShouldEqual(monitor.MonitorDetails.LifeTime);
 
         It should_contain_subscribers_field_name =() =>
-            result[2].Name.Equals(nameof(monitor.MonitorDetails.Subscribers));
+            result[2].Name.ShouldEqual((RedisValue) nameof(monitor.MonitorDetails.Subscribers));
 
         It should_contain_subscribers_field_value = () =>
-             result[2].Value.Equals(monitor.MonitorDetails.Subscribers);
+            result[2].Value.ShouldEqual((RedisValue) JsonConvert.SerializeObject(monitor.MonitorDetails.Subscribers));
 
         static MonitorProcess monitor;
         static HashEntry[] result;

@@ -10,6 +10,7 @@ using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests {
+    [Subject(typeof(Repository))]
     public class when_createuserasync_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();

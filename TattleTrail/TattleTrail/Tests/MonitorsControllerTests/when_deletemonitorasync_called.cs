@@ -3,35 +3,33 @@ using Machine.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
-using System.Threading.Tasks;
 using TattleTrail.Controllers;
 using TattleTrail.DAL;
-using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
     [Subject(typeof(MonitorsController))]
-    public class when_getmonitorsasync_get_called {
+    public class when_deletemonitorasync_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();
-            Id = fixture.Create<Guid>();
-            _repository = Mock.Of<IRepository>(x => x.GetMonitorAsync(Id) == Task.FromResult(new MonitorProcess { Id = Id}));
+            id = fixture.Create<Guid>();
+            _repository = Mock.Of<IRepository>();
             _controller = new Builder().WithRepository(_repository).Build();
         };
 
-        Because of = async () => 
-           result = await _controller.GetMonitorAsync(Id);
+        Because of = async () =>
+           result = await _controller.DeleteMonitorAsync(id);
 
-        It should_call_get_monitor_by_id = () => 
-            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Id), Times.Once);
+        It should_call_delete_monitor_async = () =>
+            Mock.Get(_repository).Verify(x => x.DeleteMonitorAsync(id), Times.Once);
 
         It should_return_valid_result = () =>
-            result.ShouldBeOfExactType(typeof(OkObjectResult));
+            result.ShouldBeOfExactType(typeof(OkResult));
 
 
         static MonitorsController _controller;
-        static Guid Id;
         static IActionResult result;
+        static Guid id;
         static IRepository _repository;
     }
 }

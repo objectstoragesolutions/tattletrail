@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TattleTrail.Controllers;
 using TattleTrail.DAL;
@@ -11,27 +11,27 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
     [Subject(typeof(MonitorsController))]
-    public class when_getmonitorsasync_have_no_data_with_mentioned_id {
-
+    public class when_getallmonitors_async {
         Establish _context = () => {
             Fixture fixture = new Fixture();
-            Id = fixture.Create<Guid>();
-            _repository = Mock.Of<IRepository>(x => x.GetMonitorAsync(Id) == Task.FromResult(new MonitorProcess { Id = Guid.Empty }));
+            monitors = fixture.Create<HashSet<MonitorProcess>>();
+            _repository = Mock.Of<IRepository>(x => x.GetAllMonitors() == Task.FromResult(monitors));
             _controller = new Builder().WithRepository(_repository).Build();
         };
 
         Because of = async () =>
-            _result = await _controller.GetMonitorAsync(Id);
+           result = await _controller.GetMonitorsAsync();
 
-        It should_call_getmonitorasync_once = () =>
-            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Id), Times.Once);
+        It should_call_get_monitor_by_id = () =>
+            Mock.Get(_repository).Verify(x => x.GetAllMonitors(), Times.Once);
 
-        It should_return_not_found_result = () =>
-            _result.ShouldBeOfExactType(typeof(NotFoundResult));
+        It should_return_valid_result = () =>
+            result.ShouldBeOfExactType(typeof(OkObjectResult));
+
 
         static MonitorsController _controller;
-        static Guid Id;
+        static IActionResult result;
+        static HashSet<MonitorProcess> monitors;
         static IRepository _repository;
-        static IActionResult _result;
     }
 }
