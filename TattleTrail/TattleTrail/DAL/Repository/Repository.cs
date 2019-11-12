@@ -60,7 +60,7 @@ namespace TattleTrail.DAL.Repository {
         }
 
         public async Task CreateUserAsync(User user) {
-            await _dataProvider.Database.HashSetAsync(Guid.NewGuid().ToByteArray(), user.ConvertUserToHashEntry());
+            await _dataProvider.Database.HashSetAsync(Guid.NewGuid().ToString(), user.ConvertUserToHashEntry());
         }
 
         private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {

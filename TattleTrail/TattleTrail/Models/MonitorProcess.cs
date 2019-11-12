@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace TattleTrail.Models {
     public class MonitorProcess {

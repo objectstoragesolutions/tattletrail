@@ -8,7 +8,7 @@ using TattleTrail.Infrastructure.Extensions;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests {
+namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.UserModelExtensionsTests {
     [Subject(typeof(UserModelExtensions))]
     public class when_converting_user_model_to_hash_entry {
         Establish _context = () => {

@@ -72,7 +72,7 @@ namespace TattleTrail.Controllers {
             }
         }
 
-        [HttpPost("{id}/report")]
+        [HttpGet("{id}/report")]
         public async Task<IActionResult> ReportProcessStatus(Guid id) {
             try {
                 var monitor = await _repository.GetMonitorAsync(id);
