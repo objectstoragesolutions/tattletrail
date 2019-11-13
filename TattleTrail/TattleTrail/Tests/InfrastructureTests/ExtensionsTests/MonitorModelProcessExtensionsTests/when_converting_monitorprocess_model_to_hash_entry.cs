@@ -17,7 +17,7 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.MonitorModelProc
             monitor = Mock.Of<MonitorProcess>(
                 x => x.Id == Guid.NewGuid() && 
                 x.MonitorDetails == 
-                    new MonitorDetails() { LifeTime = fixture.Create<int>(), 
+                    new MonitorDetails() { IntervalTime = fixture.Create<int>(), 
                          ProcessName = fixture.Create<String>(), 
                          Subscribers = fixture.Create<String[]>()
                     });
@@ -33,10 +33,10 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.MonitorModelProc
             result[0].Value.ShouldEqual((RedisValue)monitor.MonitorDetails.ProcessName);
 
         It should_contain_lifeTime_field_name = () => 
-            result[1].Name.ShouldEqual((RedisValue)nameof(monitor.MonitorDetails.LifeTime));
+            result[1].Name.ShouldEqual((RedisValue)nameof(monitor.MonitorDetails.IntervalTime));
 
         It should_contain_lifeTime_field_value = () =>
-            result[1].Value.ShouldEqual(monitor.MonitorDetails.LifeTime);
+            result[1].Value.ShouldEqual(monitor.MonitorDetails.IntervalTime);
 
         It should_contain_subscribers_field_name =() =>
             result[2].Name.ShouldEqual((RedisValue) nameof(monitor.MonitorDetails.Subscribers));

@@ -7,6 +7,7 @@ using StackExchange.Redis;
 using TattleTrail.DAL;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
+using TattleTrail.Infrastructure.EmailService;
 using TattleTrail.Infrastructure.Factories;
 
 namespace TattleTrail {
@@ -22,7 +23,9 @@ namespace TattleTrail {
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
             services.AddScoped<IMonitorDetailsFactory, MonitorDetailsFactory>();
+            services.AddScoped<ICheckInModelFactory, CheckInModelFactory>();
             services.AddSingleton<IRedisServerProvider, RedisServerProvider>();
+            services.AddSingleton<IEmailService, EmailService>();
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
             services.AddControllers();
         }

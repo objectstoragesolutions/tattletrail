@@ -11,7 +11,7 @@ namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests.MonitorDetailsFac
     public class when_create_monitor_details_model_using_factory {
         Establish _context = () => {
             Fixture fixture = new Fixture();
-            dataSource = Mock.Of<MonitorDetails>(x => x.LifeTime == fixture.Create<Int32>() && 
+            dataSource = Mock.Of<MonitorDetails>(x => x.IntervalTime == fixture.Create<Int32>() && 
                                                       x.ProcessName == fixture.Create<String>() && 
                                                       x.Subscribers == fixture.Create<String[]>());
             detailsFactory = Mock.Of<MonitorDetailsFactory>();
@@ -24,7 +24,7 @@ namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests.MonitorDetailsFac
             result.ShouldNotBeNull();
         
         It should_create_monitor_detail_with_mentioned_lifetime = () => 
-            result.LifeTime.ShouldEqual(dataSource.LifeTime);
+            result.IntervalTime.ShouldEqual(dataSource.IntervalTime);
 
         It should_create_monitor_detail_with_mentioned_processname = () =>
             result.ProcessName.ShouldEqual(dataSource.ProcessName);

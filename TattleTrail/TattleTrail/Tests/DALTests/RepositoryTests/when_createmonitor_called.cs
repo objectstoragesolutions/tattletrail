@@ -18,14 +18,14 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests {
             monitor = Mock.Of<MonitorProcess>(x => x.Id == Guid.NewGuid() &&
                         x.MonitorDetails == new MonitorDetails {
                             ProcessName = name,
-                            LifeTime = fixture.Create<int>(),
+                            IntervalTime = fixture.Create<int>(),
                             Subscribers = new String[] { }
                         }); 
             database = Mock.Of<IDatabase>(x => x.HashSetAsync( monitor.Id.ToString(), 
                 Moq.It.IsAny<HashEntry[]>(),
                 CommandFlags.None) == Task.FromResult(default(object)) && 
                 x.KeyExpireAsync(monitor.Id.ToString(),
-                TimeSpan.FromSeconds(monitor.MonitorDetails.LifeTime),
+                TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime),
                 CommandFlags.None)== Task.FromResult(true));
             provider = Mock.Of<IRedisServerProvider>(x => x.Database == database);
             repository = new Builder()
@@ -44,7 +44,7 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests {
         It should_set_expire_key_once = () =>
             Mock.Get(provider).Verify(x => x.Database.KeyExpireAsync(
                 monitor.Id.ToString(), 
-                TimeSpan.FromSeconds(monitor.MonitorDetails.LifeTime), 
+                TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime), 
                 CommandFlags.None), Times.Once);
 
         static IRedisServerProvider provider;

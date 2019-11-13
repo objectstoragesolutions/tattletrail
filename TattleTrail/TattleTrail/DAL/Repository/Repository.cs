@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.Infrastructure.Extensions;
+using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 
 namespace TattleTrail.DAL.Repository {
     public class Repository : IRepository {
         private readonly IRedisServerProvider _dataProvider;
+        private readonly ICheckInModelFactory _checkInFactory;
 
-        public Repository(IRedisServerProvider dataProvider) {
-            _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
+        public Repository(IRedisServerProvider dataProvider, ICheckInModelFactory checkInFactory) {
+            _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(RedisServerProvider));
+            _checkInFactory = checkInFactory ?? throw new ArgumentNullException(nameof(CheckInModelFactory));
         }
 
         public async Task<HashSet<MonitorProcess>> GetAllMonitors() {
@@ -40,7 +43,8 @@ namespace TattleTrail.DAL.Repository {
 
         public async Task<Boolean> CreateMonitorAsync(MonitorProcess monitor) {
             await _dataProvider.Database.HashSetAsync(monitor.Id.ToString(), monitor.ConvertMonitorToHashEntry());
-            return await _dataProvider.Database.KeyExpireAsync(monitor.Id.ToString(), TimeSpan.FromSeconds(monitor.MonitorDetails.LifeTime));
+            //return await _dataProvider.Database.KeyExpireAsync(monitor.Id.ToString(), TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime));
+            return true;
         }
 
         public async Task DeleteMonitorAsync(Guid monitorId) {
@@ -55,16 +59,22 @@ namespace TattleTrail.DAL.Repository {
             return monitorData.AsMonitorProcess(monitorId);
         }
 
-        public async Task<RedisValue> GetUserAsync(String userId) {
-            return await _dataProvider.Database.HashGetAsync(userId, "*");
-        }
-
-        public async Task CreateUserAsync(User user) {
-            await _dataProvider.Database.HashSetAsync(Guid.NewGuid().ToString(), user.ConvertUserToHashEntry());
-        }
-
         private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
             return await _dataProvider.Database.HashGetAllAsync(redisKey);
+        }
+
+        public async Task CheckInMonitorAsync(MonitorProcess monitor) {
+            var checkIn = _checkInFactory.Create(monitor.Id);
+            var data = new HashEntry(nameof(CheckIn.MonitorId), checkIn.MonitorId.ToString());
+
+            //TODO: ADD FACTORY FOR nameof(CheckIn.CheckInId).ToLower() + ":" +  checkIn.CheckInId.ToString()
+            await _dataProvider.Database.HashSetAsync(nameof(CheckIn.CheckInId).ToLower() + ":" +  checkIn.CheckInId.ToString(), new HashEntry[] { data });
+
+            await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(), 
+                TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime));
+
+            monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;
+            await CreateMonitorAsync(monitor);
         }
     }
 }

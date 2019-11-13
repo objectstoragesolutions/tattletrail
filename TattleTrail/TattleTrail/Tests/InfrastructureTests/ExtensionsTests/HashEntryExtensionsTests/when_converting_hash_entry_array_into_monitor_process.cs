@@ -18,7 +18,7 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.HashEntryExtensi
             expectedProcessLifeTime = fixture.Create<Int32>();
             expectedAmountOfSubscribers = fixture.Create<String[]>();
             var processName = new HashEntry(nameof(MonitorDetails.ProcessName), expectedProcessName);
-            var lifeTime = new HashEntry(nameof(MonitorDetails.LifeTime), expectedProcessLifeTime);
+            var lifeTime = new HashEntry(nameof(MonitorDetails.IntervalTime), expectedProcessLifeTime);
             var subscribers = new HashEntry(nameof(MonitorDetails.Subscribers), JsonConvert.SerializeObject(expectedAmountOfSubscribers));
             hashEntry = new HashEntry[] { processName, lifeTime, subscribers };
 
@@ -34,7 +34,7 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.HashEntryExtensi
             result.MonitorDetails.ProcessName.ShouldEqual(expectedProcessName);
 
         It conver_to_monitor_process_with_expected_lifetime = () =>
-            result.MonitorDetails.LifeTime.ShouldEqual(expectedProcessLifeTime);
+            result.MonitorDetails.IntervalTime.ShouldEqual(expectedProcessLifeTime);
 
         It conver_to_monitor_process_with_expected_subscribers = () =>
             result.MonitorDetails.Subscribers.ShouldEqual(expectedAmountOfSubscribers);

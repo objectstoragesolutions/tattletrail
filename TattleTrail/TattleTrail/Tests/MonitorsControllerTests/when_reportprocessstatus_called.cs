@@ -21,7 +21,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         };
 
         Because of = async () =>
-            result = await _controller.ReportProcessStatus(id);
+            result = await _controller.GetMonitorStatus(id);
 
         It should_call_get_monitor_async = () =>
             Mock.Get(_repository).Verify(x => x.GetMonitorAsync(id), Times.Once);
