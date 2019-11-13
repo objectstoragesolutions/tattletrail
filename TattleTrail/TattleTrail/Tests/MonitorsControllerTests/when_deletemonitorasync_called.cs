@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using TattleTrail.Controllers;
-using TattleTrail.DAL;
+using TattleTrail.DAL.Repository;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {

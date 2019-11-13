@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using TattleTrail.Controllers;
-using TattleTrail.DAL;
+using TattleTrail.DAL.Repository;
 using TattleTrail.Infrastructure.EmailService;
 using TattleTrail.Infrastructure.Factories;
 

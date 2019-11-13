@@ -21,7 +21,7 @@ namespace TattleTrail.DAL.Repository {
             HashSet<MonitorProcess> monitors = new HashSet<MonitorProcess>();
 
             var hashKeys = GetHashKeys();
-            
+
             foreach (var key in hashKeys) {
                 monitors.Add(await GetMonitorAsync(key));
             }
@@ -103,9 +103,9 @@ namespace TattleTrail.DAL.Repository {
             var data = new HashEntry(nameof(CheckIn.MonitorId), checkIn.MonitorId.ToString());
 
             //TODO: ADD FACTORY FOR nameof(CheckIn.CheckInId).ToLower() + ":" +  checkIn.CheckInId.ToString()
-            await _dataProvider.Database.HashSetAsync(nameof(CheckIn.CheckInId).ToLower() + ":" +  checkIn.CheckInId.ToString(), new HashEntry[] { data });
+            await _dataProvider.Database.HashSetAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(), new HashEntry[] { data });
 
-            await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(), 
+            await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(),
                 TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime));
 
             monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;

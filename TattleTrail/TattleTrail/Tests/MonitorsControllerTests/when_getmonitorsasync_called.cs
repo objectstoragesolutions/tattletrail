@@ -5,7 +5,7 @@ using Moq;
 using System;
 using System.Threading.Tasks;
 using TattleTrail.Controllers;
-using TattleTrail.DAL;
+using TattleTrail.DAL.Repository;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 

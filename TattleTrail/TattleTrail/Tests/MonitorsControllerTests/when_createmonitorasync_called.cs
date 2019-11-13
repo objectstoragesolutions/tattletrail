@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TattleTrail.Controllers;
-using TattleTrail.DAL;
+using TattleTrail.DAL.Repository;
 using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
