@@ -20,7 +20,7 @@ namespace TattleTrail.DAL.Repository {
         public async Task<HashSet<MonitorProcess>> GetAllMonitors() {
             HashSet<MonitorProcess> monitors = new HashSet<MonitorProcess>();
 
-            var hashKeys = GetAllHashKeysAsync();
+            var hashKeys = GetHashKeys();
             
             foreach (var key in hashKeys) {
                 monitors.Add(await GetMonitorAsync(key));
@@ -29,9 +29,27 @@ namespace TattleTrail.DAL.Repository {
             return monitors;
         }
 
-        public HashSet<Guid> GetAllHashKeysAsync() {
+        public async Task<List<CheckIn>> GetAllCheckIns() {
+            List<CheckIn> checkIns = new List<CheckIn>();
+            var hashKeys = GetCheckInKeys();
+            foreach (var key in hashKeys) {
+                checkIns.Add(await GetCheckIn(key));
+            }
+            return checkIns;
+        }
+
+        public async Task<CheckIn> GetCheckIn(RedisKey checkInId) {
+
+            HashEntry[] checkInData = await GetHashEntryArrayByKey(checkInId);
+            if (checkInData.Length.Equals(0)) {
+                return new CheckIn();
+            }
+            return checkInData.AsCheckInProcess(checkInId);
+        }
+
+        public HashSet<Guid> GetHashKeys(String searchPattern = "*") {
             HashSet<Guid> hashKeys = new HashSet<Guid>();
-            IEnumerable<RedisKey> allHashKeys = _dataProvider.Server.Keys(pattern: "*");
+            var allHashKeys = GetHashKeysByPattern(searchPattern);
             foreach (var key in allHashKeys) {
                 bool isValidGuid = Guid.TryParse(key, out var guidOutput);
                 if (isValidGuid) {
@@ -39,6 +57,10 @@ namespace TattleTrail.DAL.Repository {
                 }
             }
             return hashKeys;
+        }
+
+        public IEnumerable<RedisKey> GetHashKeysByPattern(String searchPattern) {
+            return _dataProvider.Server.Keys(pattern: searchPattern);
         }
 
         public async Task<Boolean> CreateMonitorAsync(MonitorProcess monitor) {
@@ -61,6 +83,19 @@ namespace TattleTrail.DAL.Repository {
 
         private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
             return await _dataProvider.Database.HashGetAllAsync(redisKey);
+        }
+
+        public IEnumerable<RedisKey> GetCheckInKeys() {
+            return GetHashKeysByPattern("checkinid:*");
+            //HashSet<Guid> checkInKeys = new HashSet<Guid>();
+            //foreach (String key in checkInHashKeys) {
+            //    var croppedKey = key.Substring(key.IndexOf(":"));
+            //    bool isValidGuid = Guid.TryParse(croppedKey, out var checkInId);
+            //    if (isValidGuid) {
+            //        checkInKeys.Add(checkInId);
+            //    }
+            //}
+            //return checkInKeys;
         }
 
         public async Task CheckInMonitorAsync(MonitorProcess monitor) {

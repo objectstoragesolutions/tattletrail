@@ -28,10 +28,14 @@ namespace TattleTrail.Infrastructure.Extensions {
             return result;
         }
 
-        public static CheckIn AsCheckInProcess(this HashEntry[] hashEntry, Guid guid) {
+        public static CheckIn AsCheckInProcess(this HashEntry[] hashEntry, RedisKey checkedInKey) {
             HashEntry monitorId = hashEntry.FirstOrDefault(x => x.Name == nameof(CheckIn.MonitorId));
+            var key = checkedInKey.ToString();
+            var croppedKey = key.Substring(key.LastIndexOf(":") + 1);
+            bool isValidGuid = Guid.TryParse(croppedKey, out var checkInId);
 
-            return new CheckIn { CheckInId = guid, MonitorId = monitorId.Value.HasValue ? Guid.Parse(monitorId.Value) : Guid.Empty };
+            //TODO: add check if guid is guid
+            return new CheckIn { CheckInId = checkInId, MonitorId = monitorId.Value.HasValue ? Guid.Parse(monitorId.Value) : Guid.Empty };
         }
     }
 }

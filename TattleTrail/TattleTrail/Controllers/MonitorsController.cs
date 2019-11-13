@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TattleTrail.DAL;
 using TattleTrail.Infrastructure.EmailService;
@@ -80,9 +82,16 @@ namespace TattleTrail.Controllers {
             try {
                 var monitor = await _repository.GetMonitorAsync(id);
                 if (monitor.Id.Equals(Guid.Empty)) {
-                    return NotFound();
+                    return NotFound($"Cant find monitor with an id:{id}");
                 }
-                return Ok(monitor);
+
+                List<CheckIn> allCheckIns = await _repository.GetAllCheckIns();
+
+                if (allCheckIns.Any(x => x.MonitorId.Equals(id))) {
+                    return Ok();
+                }
+                return NotFound();
+                //TODO: HERE I SHOULD SEND EMAILS
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
