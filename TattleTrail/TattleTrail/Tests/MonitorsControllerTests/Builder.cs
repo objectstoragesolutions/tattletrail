@@ -4,20 +4,17 @@ using TattleTrail.Controllers;
 using TattleTrail.DAL.Repository;
 using TattleTrail.Infrastructure.EmailService;
 using TattleTrail.Infrastructure.Factories;
+using TattleTrail.Models;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
     public class Builder {
         private ILogger<MonitorsController> _logger = Mock.Of<ILogger<MonitorsController>>();
-        private IRepository _repository = Mock.Of<IRepository>();
         private IMonitorModelFactory _factoryModel = Mock.Of<IMonitorModelFactory>();
         private IEmailService _emailService = Mock.Of<IEmailService>();
+        private IMonitorRepository<MonitorProcess> _monitorRepository = Mock.Of<IMonitorRepository<MonitorProcess>>();
+        private ICheckInRepository<CheckIn> _checkInRepository = Mock.Of<ICheckInRepository<CheckIn>>();
         public Builder WithLogger(ILogger<MonitorsController> logger) {
             _logger = logger;
-            return this;
-        }
-
-        public Builder WithRepository(IRepository repository) {
-            _repository = repository;
             return this;
         }
 
@@ -31,8 +28,18 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
             return this;
         }
 
+        public Builder WithMonitorRepository(IMonitorRepository<MonitorProcess> monitorRepository) {
+            _monitorRepository = monitorRepository;
+            return this;
+        }
+
+        public Builder WithCheckInRepository(ICheckInRepository<CheckIn> checkInRepository) {
+            _checkInRepository = checkInRepository;
+            return this;
+        }
+
         public MonitorsController Build() {
-            return new MonitorsController(_logger, _repository, _factoryModel, _emailService);
+            return new MonitorsController(_logger, _factoryModel, _emailService, _monitorRepository, _checkInRepository);
         }
     }
 }

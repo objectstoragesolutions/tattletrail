@@ -13,7 +13,7 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.HashEntryExtensi
     public class when_converting_hash_entry_array_into_monitor_process {
         Establish _context = () => {
             Fixture fixture = new Fixture();
-            id = fixture.Create<Guid>();
+            id = fixture.Create<Guid>().ToString();
             expectedProcessName = fixture.Create<String>();
             expectedProcessLifeTime = fixture.Create<Int32>();
             expectedAmountOfSubscribers = fixture.Create<String[]>();
@@ -28,7 +28,7 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.HashEntryExtensi
             result = hashEntry.AsMonitorProcess(id);
 
         It conver_to_monitor_process_with_expected_id = () =>
-            result.Id.ShouldEqual(id);
+            result.Id.ShouldEqual(Guid.Parse(id));
 
         It conver_to_monitor_process_with_expected_processname = () =>
             result.MonitorDetails.ProcessName.ShouldEqual(expectedProcessName);
@@ -39,7 +39,7 @@ namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.HashEntryExtensi
         It conver_to_monitor_process_with_expected_subscribers = () =>
             result.MonitorDetails.Subscribers.ShouldEqual(expectedAmountOfSubscribers);
 
-        static Guid id;
+        static RedisKey id;
         static String expectedProcessName;
         static Int32 expectedProcessLifeTime;
         static String[] expectedAmountOfSubscribers;

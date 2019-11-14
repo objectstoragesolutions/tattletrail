@@ -5,6 +5,7 @@ using Moq;
 using System;
 using TattleTrail.Controllers;
 using TattleTrail.DAL.Repository;
+using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.MonitorsControllerTests {
@@ -13,15 +14,15 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             id = fixture.Create<Guid>();
-            _repository = Mock.Of<IRepository>();
-            _controller = new Builder().WithRepository(_repository).Build();
+            _repository = Mock.Of<IMonitorRepository<MonitorProcess>>();
+            _controller = new Builder().WithMonitorRepository(_repository).Build();
         };
 
         Because of = async () =>
            result = await _controller.DeleteMonitorAsync(id);
 
         It should_call_delete_monitor_async = () =>
-            Mock.Get(_repository).Verify(x => x.DeleteMonitorAsync(id), Times.Once);
+            Mock.Get(_repository).Verify(x => x.DeleteAsync(id), Times.Once);
 
         It should_return_valid_result = () =>
             result.ShouldBeOfExactType(typeof(OkResult));
@@ -30,6 +31,6 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         static MonitorsController _controller;
         static IActionResult result;
         static Guid id;
-        static IRepository _repository;
+        static IMonitorRepository<MonitorProcess> _repository;
     }
 }

@@ -17,8 +17,8 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
             Fixture fixture = new Fixture();
             monitorDetails = fixture.Create<MonitorDetails>();
             _factory = Mock.Of<IMonitorModelFactory>(x => x.Create(monitorDetails) == new MonitorProcess());
-            _repository = Mock.Of<IRepository>();
-            _controller = new Builder().WithModelFactory(_factory).WithRepository(_repository).Build();
+            _repository = Mock.Of<IMonitorRepository<MonitorProcess>>();
+            _controller = new Builder().WithModelFactory(_factory).WithMonitorRepository(_repository).Build();
         };
         Because of = async () => 
             result = await _controller.CreateMonitorAsync(monitorDetails);
@@ -28,7 +28,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
 
         static MonitorsController _controller;
         static MonitorDetails monitorDetails;
-        static IRepository _repository;
+        static IMonitorRepository<MonitorProcess> _repository;
         static IMonitorModelFactory _factory;
         static IActionResult result;
     }

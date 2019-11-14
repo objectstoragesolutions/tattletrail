@@ -6,7 +6,7 @@ using TattleTrail.Models;
 
 namespace TattleTrail.Infrastructure.Extensions {
     public static class HashEntryExtensions {
-        public static MonitorProcess AsMonitorProcess(this HashEntry[] hashEntry, Guid guid) {
+        public static MonitorProcess AsMonitorProcess(this HashEntry[] hashEntry, RedisKey monitorId) {
             
             HashEntry processName = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.ProcessName));
             HashEntry lifeTime = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.IntervalTime));
@@ -15,7 +15,7 @@ namespace TattleTrail.Infrastructure.Extensions {
             HashEntry lastCheckIn = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.LastCheckIn));
 
             MonitorProcess result = new MonitorProcess { 
-            Id = guid, 
+            Id = Guid.Parse(monitorId), 
                 MonitorDetails = new MonitorDetails { 
                     ProcessName = processName.Value.HasValue ? processName.Value.ToString() : String.Empty,
                     IntervalTime = lifeTime.Value.HasValue ? (int)lifeTime.Value : 0,

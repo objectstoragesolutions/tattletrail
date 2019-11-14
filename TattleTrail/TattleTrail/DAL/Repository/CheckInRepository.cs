@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using StackExchange.Redis;
+using TattleTrail.DAL.RedisServerProvider;
+using TattleTrail.Infrastructure.Extensions;
+using TattleTrail.Infrastructure.Factories;
+using TattleTrail.Models;
+
+namespace TattleTrail.DAL.Repository {
+    public class CheckInRepository : ICheckInRepository<CheckIn> {
+
+        private readonly IRedisServerProvider _dataProvider;
+        private readonly ICheckInModelFactory _checkInFactory;
+
+        public CheckInRepository(IRedisServerProvider dataProvider, ICheckInModelFactory checkInFactory) {
+            _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(RedisServerProvider));
+            _checkInFactory = checkInFactory ?? throw new ArgumentNullException(nameof(CheckInModelFactory));
+        }
+        public async Task CreateAsync(Guid id) {
+            var checkIn = _checkInFactory.Create(id);
+            var data = new HashEntry(nameof(CheckIn.MonitorId), checkIn.MonitorId.ToString());
+
+
+            await _dataProvider.Database.HashSetAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(), new HashEntry[] { data });
+
+            //await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(),
+            //    TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime));
+
+            //monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;
+            //return await CreateMonitorAsync(monitor);
+        }
+
+        public async Task<HashSet<CheckIn>> GetAllAsync() {
+            HashSet<CheckIn> checkIns = new HashSet<CheckIn>();
+            var hashKeys = GetAllCheckInKeys("checkinid:*"); ;
+            foreach (var key in hashKeys) {
+                checkIns.Add(await GetAsync(key));
+            }
+            return checkIns;
+        }
+
+        public async Task<CheckIn> GetAsync(RedisKey key) {
+            HashEntry[] checkInData = await GetHashEntryArrayByKey(key);
+            if (checkInData.Length.Equals(0)) {
+                return new CheckIn();
+            }
+            return checkInData.AsCheckInProcess(key);
+        }
+
+        private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
+            return await _dataProvider.Database.HashGetAllAsync(redisKey);
+        }
+
+        private IEnumerable<RedisKey> GetAllCheckInKeys(String pattern) {
+            return _dataProvider.Server.Keys(pattern: pattern);
+        }
+    }
+}

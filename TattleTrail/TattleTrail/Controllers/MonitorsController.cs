@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TattleTrail.DAL.Repository;
@@ -14,21 +13,27 @@ namespace TattleTrail.Controllers {
     [ApiController]
     public class MonitorsController : ControllerBase {
         private readonly ILogger<MonitorsController> _logger;
-        private readonly IRepository _repository;
+        private readonly IMonitorRepository<MonitorProcess> _monitorRepository;
+        private readonly ICheckInRepository<CheckIn> _checkInRepository;
         private readonly IMonitorModelFactory _monitorModelFactory;
         private readonly IEmailService _emailService;
-        public MonitorsController(ILogger<MonitorsController> logger, IRepository repository, IMonitorModelFactory modelFactory, IEmailService emailService) {
+        public MonitorsController(ILogger<MonitorsController> logger, 
+            IMonitorModelFactory modelFactory, 
+            IEmailService emailService, 
+            IMonitorRepository<MonitorProcess> monitorRepository,
+            ICheckInRepository<CheckIn> checkInRepository) {
+
             _logger = logger ?? throw new ArgumentNullException(nameof(MonitorsController));
-            _repository = repository ?? throw new ArgumentNullException(nameof(MonitorsController));
             _monitorModelFactory = modelFactory ?? throw new ArgumentNullException(nameof(MonitorsController));
             _emailService = emailService ?? throw new ArgumentNullException(nameof(EmailService));
+            _monitorRepository = monitorRepository ?? throw new ArgumentNullException(nameof(MonitorRepository));
+            _checkInRepository = checkInRepository ?? throw new ArgumentNullException(nameof(CheckInRepository));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMonitorsAsync() {
             try {
-                var result = await _repository.GetAllMonitors();
-
+                var result = await _monitorRepository.GetAllAsync();
                 return Ok(result);
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside GetMonitorsAsync function: {ex.Message}");
@@ -39,7 +44,7 @@ namespace TattleTrail.Controllers {
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMonitorAsync(Guid id) {
             try {
-                var result = await _repository.GetMonitorAsync(id);
+                var result = await _monitorRepository.GetAsync(id.ToString());
                 if (result.Id.Equals(Guid.Empty)) {
                     return NotFound();
                 }
@@ -55,7 +60,7 @@ namespace TattleTrail.Controllers {
         public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) { 
             try {
                 var monitor = _monitorModelFactory.Create(details);
-                var result = await _repository.CreateMonitorAsync(monitor);
+                var result = await _monitorRepository.CreateAsync(monitor);
                 if (result) {
                     return Ok();
                 }
@@ -69,7 +74,7 @@ namespace TattleTrail.Controllers {
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMonitorAsync(Guid id) {
             try {
-                await _repository.DeleteMonitorAsync(id);
+                await _monitorRepository.DeleteAsync(id);
                 return Ok();
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside DeleteMonitorAsync function: {ex.Message}");
@@ -80,12 +85,12 @@ namespace TattleTrail.Controllers {
         [HttpGet("{id}/checkin")]
         public async Task<IActionResult> GetMonitorStatus(Guid id) {
             try {
-                var monitor = await _repository.GetMonitorAsync(id);
+                var monitor = await _monitorRepository.GetAsync(id.ToString());
                 if (monitor.Id.Equals(Guid.Empty)) {
                     return NotFound($"Cant find monitor with an id:{id}");
                 }
 
-                List<CheckIn> allCheckIns = await _repository.GetAllCheckIns();
+                var allCheckIns = await _checkInRepository.GetAllAsync();
 
                 if (allCheckIns.Any(x => x.MonitorId.Equals(id))) {
                     return Ok();
@@ -101,11 +106,11 @@ namespace TattleTrail.Controllers {
         [HttpPost("{id}/checkin")]
         public async Task<IActionResult> PostMonitorStatus(Guid id) {
             try {
-                var monitor = await _repository.GetMonitorAsync(id);
+                var monitor = await _monitorRepository.GetAsync(id.ToString());
                 if (monitor.Id.Equals(Guid.Empty)) {
                     return NotFound($"Cant find monitor with an id:{id}");
                 }
-                await _repository.CheckInMonitorAsync(monitor);
+                await _checkInRepository.CreateAsync(id);
                 return Ok("Thank you! Updated! ");
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");

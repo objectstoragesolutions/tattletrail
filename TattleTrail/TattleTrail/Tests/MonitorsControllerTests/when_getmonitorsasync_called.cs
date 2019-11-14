@@ -15,15 +15,15 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             Id = fixture.Create<Guid>();
-            _repository = Mock.Of<IRepository>(x => x.GetMonitorAsync(Id) == Task.FromResult(new MonitorProcess { Id = Id}));
-            _controller = new Builder().WithRepository(_repository).Build();
+            _repository = Mock.Of<IMonitorRepository<MonitorProcess>>(x => x.GetAsync(Id.ToString()) == Task.FromResult(new MonitorProcess { Id = Id}));
+            _controller = new Builder().WithMonitorRepository(_repository).Build();
         };
 
         Because of = async () => 
            result = await _controller.GetMonitorAsync(Id);
 
         It should_call_get_monitor_by_id = () => 
-            Mock.Get(_repository).Verify(x => x.GetMonitorAsync(Id), Times.Once);
+            Mock.Get(_repository).Verify(x => x.GetAsync(Id.ToString()), Times.Once);
 
         It should_return_valid_result = () =>
             result.ShouldBeOfExactType(typeof(OkObjectResult));
@@ -32,6 +32,6 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         static MonitorsController _controller;
         static Guid Id;
         static IActionResult result;
-        static IRepository _repository;
+        static IMonitorRepository<MonitorProcess> _repository;
     }
 }
