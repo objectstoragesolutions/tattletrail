@@ -15,10 +15,8 @@ namespace TattleTrail.DAL.Repository {
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(RedisServerProvider));
         }
 
-        //NOT SURE I SHOULD RETURN BOOLEAN
-        public async Task<Boolean> CreateAsync(MonitorProcess monitor) {
+        public async Task CreateAsync(MonitorProcess monitor) {
             await _dataProvider.Database.HashSetAsync(monitor.Id.ToString(), monitor.ConvertMonitorToHashEntry());
-            return true;
         }
 
         public async Task DeleteAsync(Guid monitorId) {

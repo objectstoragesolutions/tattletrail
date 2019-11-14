@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
     [Subject(typeof(CheckInRepository))]
+    [Ignore("Rework")]
     public class when_get_all_async_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();

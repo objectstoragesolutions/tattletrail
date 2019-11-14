@@ -60,11 +60,9 @@ namespace TattleTrail.Controllers {
         public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) { 
             try {
                 var monitor = _monitorModelFactory.Create(details);
-                var result = await _monitorRepository.CreateAsync(monitor);
-                if (result) {
-                    return Ok();
-                }
-                return StatusCode(500, "Internal server error.");
+                await _monitorRepository.CreateAsync(monitor);
+                
+                return Ok();
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside CreateMonitorAsync function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
@@ -114,12 +112,9 @@ namespace TattleTrail.Controllers {
 
                 monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;
 
-                var isUpdated = await _monitorRepository.CreateAsync(monitor);
-                if (isUpdated) {
-                    return Ok("Thank you! Updated! ");
-                }
-
-                return NotFound($"Cant update monitor with an id:{id}");
+                await _monitorRepository.CreateAsync(monitor);
+                
+                return Ok("Thank you! Updated! ");
 
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
