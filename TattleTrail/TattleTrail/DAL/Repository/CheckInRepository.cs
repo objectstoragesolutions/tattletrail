@@ -21,15 +21,14 @@ namespace TattleTrail.DAL.Repository {
             var checkIn = _checkInModelFactory.Create(id);
             var data = new HashEntry(nameof(CheckIn.MonitorId), checkIn.MonitorId.ToString());
 
-            await _dataProvider.Database.HashSetAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(), new HashEntry[] { data });
+            await _dataProvider.Database.HashSetAsync(checkIn.CreateKeyString(), new HashEntry[] { data });
 
-            await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(),
-                TimeSpan.FromSeconds(interval));
+            await _dataProvider.Database.KeyExpireAsync(checkIn.CreateKeyString(), TimeSpan.FromSeconds(interval));
         }
 
         public async Task<HashSet<CheckIn>> GetAllAsync() {
             HashSet<CheckIn> checkIns = new HashSet<CheckIn>();
-            var hashKeys = GetAllCheckInKeys("checkinid:*"); ;
+            var hashKeys = GetAllCheckInKeys("checkinid:*");
             foreach (var key in hashKeys) {
                 checkIns.Add(await GetAsync(key));
             }

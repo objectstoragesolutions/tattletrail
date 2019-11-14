@@ -18,7 +18,6 @@ namespace TattleTrail.DAL.Repository {
         //NOT SURE I SHOULD RETURN BOOLEAN
         public async Task<Boolean> CreateAsync(MonitorProcess monitor) {
             await _dataProvider.Database.HashSetAsync(monitor.Id.ToString(), monitor.ConvertMonitorToHashEntry());
-            //return await _dataProvider.Database.KeyExpireAsync(monitor.Id.ToString(), TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime));
             return true;
         }
 
@@ -50,14 +49,14 @@ namespace TattleTrail.DAL.Repository {
 
         private HashSet<RedisKey> GetAllMonitorsKeys() {
             HashSet<RedisKey> hashKeys = new HashSet<RedisKey>();
-            var allHashKeys = GetAllCheckInKeys("*");
+            var allHashKeys = GetAllKeys("*");
             foreach (var key in allHashKeys) {
                 hashKeys.Add(key);
             }
             return hashKeys;
         }
 
-        private IEnumerable<RedisKey> GetAllCheckInKeys(String pattern) {
+        private IEnumerable<RedisKey> GetAllKeys(String pattern) {
             return _dataProvider.Server.Keys(pattern: pattern);
         }
 

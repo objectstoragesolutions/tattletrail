@@ -83,7 +83,7 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpGet("{id}/checkin")]
-        public async Task<IActionResult> GetMonitorStatus(Guid id) {
+        public async Task<IActionResult> GetMonitorStatusAsync(Guid id) {
             try {
                 var monitor = await _monitorRepository.GetAsync(id.ToString());
                 if (monitor.Id.Equals(Guid.Empty)) {
@@ -104,7 +104,7 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpPost("{id}/checkin")]
-        public async Task<IActionResult> PostMonitorStatus(Guid id) {
+        public async Task<IActionResult> PostMonitorStatusAsync(Guid id) {
             try {
                 var monitor = await _monitorRepository.GetAsync(id.ToString());
                 if (monitor.Id.Equals(Guid.Empty)) {
