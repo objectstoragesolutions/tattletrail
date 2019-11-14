@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace TattleTrail.Infrastructure.EmailService {
     public interface IEmailService {
-        Task SendEmailAsync(string subscribers, string subject, string message);
+        Task SendEmailAsync(String[] subscribers, String subject, String message);
     }
 }

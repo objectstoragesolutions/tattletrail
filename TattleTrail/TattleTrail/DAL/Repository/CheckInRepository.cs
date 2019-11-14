@@ -11,24 +11,20 @@ namespace TattleTrail.DAL.Repository {
     public class CheckInRepository : ICheckInRepository<CheckIn> {
 
         private readonly IRedisServerProvider _dataProvider;
-        private readonly ICheckInModelFactory _checkInFactory;
+        private readonly ICheckInModelFactory _checkInModelFactory;
 
         public CheckInRepository(IRedisServerProvider dataProvider, ICheckInModelFactory checkInFactory) {
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(RedisServerProvider));
-            _checkInFactory = checkInFactory ?? throw new ArgumentNullException(nameof(CheckInModelFactory));
+            _checkInModelFactory = checkInFactory ?? throw new ArgumentNullException(nameof(CheckInModelFactory));
         }
-        public async Task CreateAsync(Guid id) {
-            var checkIn = _checkInFactory.Create(id);
+        public async Task CreateAsync(Guid id, Int32 interval) {
+            var checkIn = _checkInModelFactory.Create(id);
             var data = new HashEntry(nameof(CheckIn.MonitorId), checkIn.MonitorId.ToString());
-
 
             await _dataProvider.Database.HashSetAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(), new HashEntry[] { data });
 
-            //await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(),
-            //    TimeSpan.FromSeconds(monitor.MonitorDetails.IntervalTime));
-
-            //monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;
-            //return await CreateMonitorAsync(monitor);
+            await _dataProvider.Database.KeyExpireAsync(nameof(CheckIn.CheckInId).ToLower() + ":" + checkIn.CheckInId.ToString(),
+                TimeSpan.FromSeconds(interval));
         }
 
         public async Task<HashSet<CheckIn>> GetAllAsync() {

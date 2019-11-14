@@ -95,8 +95,8 @@ namespace TattleTrail.Controllers {
                 if (allCheckIns.Any(x => x.MonitorId.Equals(id))) {
                     return Ok();
                 }
+                await _emailService.SendEmailAsync(monitor.MonitorDetails.Subscribers, "Cant find check in for process", "Looks like your process goes off");
                 return NotFound();
-                //TODO: HERE I SHOULD SEND EMAILS
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
@@ -110,8 +110,17 @@ namespace TattleTrail.Controllers {
                 if (monitor.Id.Equals(Guid.Empty)) {
                     return NotFound($"Cant find monitor with an id:{id}");
                 }
-                await _checkInRepository.CreateAsync(id);
-                return Ok("Thank you! Updated! ");
+                await _checkInRepository.CreateAsync(id, monitor.MonitorDetails.IntervalTime);
+
+                monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;
+
+                var isUpdated = await _monitorRepository.CreateAsync(monitor);
+                if (isUpdated) {
+                    return Ok("Thank you! Updated! ");
+                }
+
+                return NotFound($"Cant update monitor with an id:{id}");
+
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
