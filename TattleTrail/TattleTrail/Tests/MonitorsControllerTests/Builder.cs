@@ -10,7 +10,6 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
     public class Builder {
         private ILogger<MonitorsController> _logger = Mock.Of<ILogger<MonitorsController>>();
         private IMonitorModelFactory _factoryModel = Mock.Of<IMonitorModelFactory>();
-        private IEmailService _emailService = Mock.Of<IEmailService>();
         private IMonitorRepository<MonitorProcess> _monitorRepository = Mock.Of<IMonitorRepository<MonitorProcess>>();
         private ICheckInRepository<CheckIn> _checkInRepository = Mock.Of<ICheckInRepository<CheckIn>>();
         public Builder WithLogger(ILogger<MonitorsController> logger) {
@@ -20,11 +19,6 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
 
         public Builder WithModelFactory(IMonitorModelFactory modelFactory) {
             _factoryModel = modelFactory;
-            return this;
-        }
-
-        public Builder WithEmailService(IEmailService emailService) {
-            _emailService = emailService;
             return this;
         }
 
@@ -39,7 +33,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
         }
 
         public MonitorsController Build() {
-            return new MonitorsController(_logger, _factoryModel, _emailService, _monitorRepository, _checkInRepository);
+            return new MonitorsController(_logger, _factoryModel, _monitorRepository, _checkInRepository);
         }
     }
 }

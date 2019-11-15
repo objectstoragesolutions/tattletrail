@@ -45,17 +45,17 @@ namespace TattleTrail.DAL.Repository {
             return monitorData.AsMonitorProcess(monitorId);
         }
 
+        private IEnumerable<RedisKey> GetAllKeys() {
+            return _dataProvider.Server.Keys(pattern: "*");
+        }
+
         private HashSet<RedisKey> GetAllMonitorsKeys() {
             HashSet<RedisKey> hashKeys = new HashSet<RedisKey>();
-            var allHashKeys = GetAllKeys("*");
+            var allHashKeys = GetAllKeys();
             foreach (var key in allHashKeys) {
                 hashKeys.Add(key);
             }
             return hashKeys;
-        }
-
-        private IEnumerable<RedisKey> GetAllKeys(String pattern) {
-            return _dataProvider.Server.Keys(pattern: pattern);
         }
 
         private async Task<HashEntry[]> GetHashEntryArrayByKey(RedisKey redisKey) {
