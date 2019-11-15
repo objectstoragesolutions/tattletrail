@@ -31,7 +31,7 @@ namespace TattleTrail.Controllers {
                 var result = await _monitorRepository.GetAllAsync();
                 return Ok(result);
             } catch (Exception ex) {
-                _logger.LogError($"Something went wrong inside GetMonitorsAsync function: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetMonitorsAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }
@@ -46,7 +46,7 @@ namespace TattleTrail.Controllers {
                 return Ok(result);
 
             } catch (Exception ex) {
-                _logger.LogError($"Something went wrong inside GetMonitorAsync function: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetMonitorAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }
@@ -59,7 +59,7 @@ namespace TattleTrail.Controllers {
                 
                 return Ok();
             } catch (Exception ex) {
-                _logger.LogError($"Something went wrong inside CreateMonitorAsync function: {ex.Message}");
+                _logger.LogError($"Something went wrong inside CreateMonitorAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }
@@ -70,7 +70,7 @@ namespace TattleTrail.Controllers {
                 await _monitorRepository.DeleteAsync(id);
                 return Ok();
             } catch (Exception ex) {
-                _logger.LogError($"Something went wrong inside DeleteMonitorAsync function: {ex.Message}");
+                _logger.LogError($"Something went wrong inside DeleteMonitorAsynс: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }
@@ -91,7 +91,7 @@ namespace TattleTrail.Controllers {
                 return Ok("Thank you! Updated! ");
 
             } catch (Exception ex) {
-                _logger.LogError($"Something went wrong inside SetProcessStatus function: {ex.Message}");
+                _logger.LogError($"Something went wrong inside PostMonitorStatusAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }

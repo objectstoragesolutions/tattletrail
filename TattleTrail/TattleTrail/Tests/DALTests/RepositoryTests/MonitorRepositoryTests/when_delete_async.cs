@@ -9,7 +9,7 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
     [Subject(typeof(MonitorRepository))]
-    [Ignore("rework")]
+    [Ignore("Rework")]
     public class when_delete_async {
         Establish _context = () => {
             Fixture fixture = new Fixture();

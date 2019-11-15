@@ -5,6 +5,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
 using TattleTrail.Models;
@@ -19,7 +20,8 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
             key = fixture.Create<Guid>();
             redisKey = key.ToString();
             redisKeys = new RedisKey[] { redisKey };
-            serverProvider = Mock.Of<IRedisServerProvider>(x => x.Server.Keys(Moq.It.IsAny<int>(), "checkinid:*", Moq.It.IsAny<int>(), Moq.It.IsAny<CommandFlags>()) ==  redisKeys );
+            serverProvider = Mock.Of<IRedisServerProvider> (x => x.Server.Keys(0, "checkinid:*", 10, CommandFlags.None) == redisKeys && 
+                             x.Database.HashGetAllAsync(Moq.It.IsAny<RedisKey>(), CommandFlags.None) == Task.FromResult( new HashEntry[] { }));
             repository = new Builder().WithRedisServerProvider(serverProvider).Build();
         };
 
@@ -27,7 +29,7 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
             await repository.GetAllAsync();
 
         It should_get_keys_by_pattern = () =>
-                Mock.Get(serverProvider).Verify(x => x.Server.Keys(Moq.It.IsAny<int>(), "checkinid:*", Moq.It.IsAny<int>(), Moq.It.IsAny<CommandFlags>()), Times.Once);
+                Mock.Get(serverProvider).Verify(x => x.Server.Keys(0, "checkinid:*", 10, CommandFlags.None), Times.Once);
 
         It should_call_get_async_n_times = () =>
                 Mock.Get(serverProvider).Verify(x => x.Database.HashGetAllAsync(redisKey, CommandFlags.None), Times.Exactly(redisKeys.Count()));
