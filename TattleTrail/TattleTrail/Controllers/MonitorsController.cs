@@ -85,6 +85,7 @@ namespace TattleTrail.Controllers {
                 await _checkInRepository.CreateAsync(id, monitor.MonitorDetails.IntervalTime);
 
                 monitor.MonitorDetails.LastCheckIn = DateTime.UtcNow;
+                monitor.MonitorDetails.IsDown = false;
 
                 await _monitorRepository.CreateAsync(monitor);
                 

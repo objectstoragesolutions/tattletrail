@@ -9,10 +9,10 @@ namespace TattleTrail.Infrastructure.Extensions {
             var lifeTime = new HashEntry(nameof(monitor.MonitorDetails.IntervalTime), monitor.MonitorDetails.IntervalTime);
             var subscribers = new HashEntry(nameof(monitor.MonitorDetails.Subscribers), JsonConvert.SerializeObject(monitor.MonitorDetails.Subscribers));
             var dateOfCreation = new HashEntry(nameof(monitor.MonitorDetails.DateOfCreation), monitor.MonitorDetails.DateOfCreation.ToString());
-            var checkeInLastTime = new HashEntry(nameof(monitor.MonitorDetails.LastCheckIn), monitor.MonitorDetails.LastCheckIn.ToString());
+            var checkedLastTime = new HashEntry(nameof(monitor.MonitorDetails.LastCheckIn), monitor.MonitorDetails.LastCheckIn.ToString());
             var isDown = new HashEntry(nameof(monitor.MonitorDetails.IsDown), monitor.MonitorDetails.IsDown.ToString());
 
-            return new HashEntry[] { processName, lifeTime, subscribers, dateOfCreation, checkeInLastTime, isDown };
+            return new HashEntry[] { processName, lifeTime, subscribers, dateOfCreation, checkedLastTime, isDown };
         }
     }
 }
