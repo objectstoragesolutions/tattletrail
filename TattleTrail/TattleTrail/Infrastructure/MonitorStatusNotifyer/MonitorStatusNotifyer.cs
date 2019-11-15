@@ -35,10 +35,16 @@ namespace TattleTrail.Infrastructure.MonitorStatusNotifyer {
 
                 foreach (var monitorId in noCheckinsFor) {
                     var problematicMonitor = allMonitors.Where(x => x.Id.Equals(monitorId)).First();
-                    Console.WriteLine($"No checkIns for:{problematicMonitor.MonitorDetails.ProcessName}");
-                    //if (problematicMonitor != null) {
-                    //await _emailService.SendEmailAsync(monitor.MonitorDetails.Subscribers, "Cant find check in for process", "Looks like your process goes off");
-                    //}
+
+                    if (problematicMonitor != null) {
+
+                        problematicMonitor.MonitorDetails.IsDown = true;
+
+                        await _monitorRepository.CreateAsync(problematicMonitor);
+
+                        Console.WriteLine($"No checkIns for {problematicMonitor.MonitorDetails.ProcessName} with id {problematicMonitor.Id}");
+                        //await _emailService.SendEmailAsync(monitor.MonitorDetails.Subscribers, "Cant find check in for process", "Looks like your process goes off");
+                    }
                 }
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside MonitorStatusNotifyer: {ex.Message}");
