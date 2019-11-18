@@ -1,8 +1,3 @@
-FROM mcr.microsoft.com/dotnet/core/runtime:3.0-buster-slim AS base
-WORKDIR /app
-COPY . .
-RUN dotnet test
-
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["TattleTrail.Test/TattleTrail.Test.csproj", "TattleTrail.Test/"]
