@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  tattletrail:
+    image: ${DOCKER_REGISTRY-}tattletrail
+    build:
+      context: .
+      dockerfile: TattleTrail/Dockerfile
+  redis:
+    image:'bitnami/redis:latest'
+    ports: 
+      - '6379'
+
+
