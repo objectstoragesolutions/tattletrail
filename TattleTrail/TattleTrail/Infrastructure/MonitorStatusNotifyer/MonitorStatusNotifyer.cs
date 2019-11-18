@@ -25,7 +25,7 @@ namespace TattleTrail.Infrastructure.MonitorStatusNotifyer {
             try {
                 var allMonitors = await _monitorRepository.GetAllAsync();
 
-                var allMonitorIds = allMonitors.Select(x => x.Id);
+                var allMonitorIds = allMonitors.Where(x => !x.MonitorDetails.IsDown).Select(x => x.Id);
 
                 var allCheckIns = await _checkInRepository.GetAllAsync();
 
@@ -41,9 +41,7 @@ namespace TattleTrail.Infrastructure.MonitorStatusNotifyer {
                         problematicMonitor.MonitorDetails.IsDown = true;
 
                         await _monitorRepository.CreateAsync(problematicMonitor);
-
-                        Console.WriteLine($"No checkIns for {problematicMonitor.MonitorDetails.ProcessName} with id {problematicMonitor.Id}");
-                        //await _emailService.SendEmailAsync(monitor.MonitorDetails.Subscribers, "Cant find check in for process", "Looks like your process goes off");
+                        await _emailService.SendEmailAsync(problematicMonitor.MonitorDetails.Subscribers, "Cant find check in for process", "Looks like your process goes off");
                     }
                 }
             } catch (Exception ex) {

@@ -17,7 +17,7 @@ namespace TattleTrail.Infrastructure.MonitorsStatusService {
 
                 await _monitorStatusNotifyer.NotifyAsync();
 
-                await Task.Delay(TimeSpan.FromSeconds(20), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
         }
     }
