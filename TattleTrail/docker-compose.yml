@@ -2,9 +2,15 @@ version: '3.4'
 
 services:
   tattletrail:
-    build: "C:/Projects/tattletrail/TattleTrail/TattleTrail"
+    image: ${DOCKER_REGISTRY-}tattletrail
+    build:
+      context: .
+      dockerfile: TattleTrail/Dockerfile
     ports:
-      - "5000:80"
-
-  redis-server:
-    image: "redis:latest"
+      - "6379:6379"
+    depends_on:
+      - db
+    container_name: TattleTrailv1.0
+  db:
+    image: redis
+    container_name: redis-image
