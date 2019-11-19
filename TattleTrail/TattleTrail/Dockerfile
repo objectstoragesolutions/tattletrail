@@ -1,12 +1,12 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
-COPY "TattleTrail/TattleTrail.csproj" .
+COPY TattleTrail.csproj .
 RUN dotnet restore "TattleTrail.csproj"
 COPY . .
-RUN dotnet build "TattleTrail/TattleTrail.csproj" -c Release -o /app/build
+RUN dotnet build "TattleTrail.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "TattleTrail/TattleTrail.csproj" -c Release -o /app/publish
+RUN dotnet publish "TattleTrail.csproj" -c Release -o /app/publish
 
 FROM publish AS final
 WORKDIR /app

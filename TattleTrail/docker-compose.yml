@@ -4,8 +4,8 @@ services:
   tattletrail:
     image: ${DOCKER_REGISTRY-}tattletrail
     build:
-      context: .
-      dockerfile: TattleTrail/Dockerfile
+      context: TattleTrail/
+      dockerfile: Dockerfile
     ports:
       - "6379:6379"
     depends_on:
