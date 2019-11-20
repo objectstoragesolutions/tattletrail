@@ -10,7 +10,7 @@ services:
       - "6379:6379"
     depends_on:
       - db
-    container_name: TattleTrailv1.0
+    container_name: tattletrail
   db:
     image: redis
     container_name: redis-image

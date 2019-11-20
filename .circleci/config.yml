@@ -46,10 +46,32 @@ jobs:
        - run:
            name: "Run Build step"
            command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
+   deploy:
+     docker:
+        - image: buildpack-deps:trusty
+     steps:
+        - checkout
+        - run:
+            name: Deploy master to Heroku
+            command: |
+                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 workflows:
+   version: 2
    test_and_build:
      jobs:
        - test
        - build:
           requires:
             - test
+   build-deploy:
+     jobs:
+      - test
+      - build:
+         requires:
+            - test
+      - deploy:
+         requires:
+            - build
+         filters:
+           branches:
+             only: master
