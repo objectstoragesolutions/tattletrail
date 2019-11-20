@@ -13,9 +13,6 @@ jobs:
       - restore_cache:
           keys:
             - dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
-      - run:
-          name: "Install project dependencies"
-          command: dotnet.exe restore
       - save_cache:
           paths:
             - C:\Users\circleci\.nuget\packages
