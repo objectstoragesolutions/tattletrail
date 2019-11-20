@@ -8,6 +8,7 @@ jobs:
      description: Setup and run application tests
      executor:
        name: win/vs2019
+       shell: powershell.exe
      steps:
        - checkout
        - restore_cache:
