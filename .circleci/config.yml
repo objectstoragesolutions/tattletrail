@@ -17,8 +17,7 @@ jobs:
            name: "Install project dependencies"
            command: dotnet.exe restore "TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj"
        - save_cache:
-           paths:
-             - C:\Users\circleci\.nuget\packages
+           paths: C:\Users\circleci\.nuget\packages
            key: dotnet-packages-v1-{{ checksum ""TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj"" }}
        - run:
            name: "Run Application Tests"
