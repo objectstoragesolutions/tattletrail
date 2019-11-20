@@ -7,6 +7,7 @@ jobs:
   build:
     executor:
       name: win/vs2019
+      shell: powershell.exe
     steps:
       - checkout
       - restore_cache:
@@ -24,6 +25,6 @@ jobs:
           command: dotnet.exe publish -c Release -r win10-x64
       - run:
           name: "Test the executable"
-          command: .\bin\Release\netcoreapp3.0\win10-x64\TattleTrail.exe
+          command: C:\Projects\tattletrail\TattleTrail\TattleTrail.Test\bin\Release\netcoreapp3.0\TattleTrail.exe
       - store_artifacts:
-          path: .\bin\Release\netcoreapp3.0\win10-x64\TattleTrail.exe
+          path: C:\Projects\tattletrail\TattleTrail\TattleTrail\bin\Release\netcoreapp3.0\TattleTrail.exe
