@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Moq;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
@@ -12,14 +11,14 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
     [Subject(typeof(MonitorRepository))]
-    [Ignore("Rework")]
     public class when_get_async_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             key = fixture.Create<Guid>();
             redisKey = key.ToString();
-            redisKeys = new RedisKey []{ redisKey };
-            serverProvider = Mock.Of<IRedisServerProvider>(x => x.Server.Keys(Moq.It.IsAny<int>(), "*", Moq.It.IsAny<int>(), Moq.It.IsAny<CommandFlags>()) == Task.FromResult(redisKeys));
+            hashEntry = fixture.Create<HashEntry>();
+            redisHash = new HashEntry []{ hashEntry };
+            serverProvider = Mock.Of<IRedisServerProvider>(x => x.Database.HashGetAllAsync(redisKey, CommandFlags.None) == Task.FromResult(redisHash));
             repository = new Builder().WithRedisServerProvider(serverProvider).Build();
         };
 
@@ -31,8 +30,9 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
 
         static IMonitorRepository<MonitorProcess> repository;
         static IRedisServerProvider serverProvider;
-        static IEnumerable<RedisKey> redisKeys;
+        static HashEntry[] redisHash;
         static RedisKey redisKey;
+        static HashEntry hashEntry;
         static Guid key;
     }
 }

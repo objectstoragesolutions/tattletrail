@@ -13,7 +13,6 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
     [Subject(typeof(MonitorRepository))]
-    [Ignore("Looks like i should add multiplexer for mocking")]
     public class when_get_all_async {
         Establish _context = () => {
             Fixture fixture = new Fixture();
@@ -22,7 +21,7 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
             redisKeys = new RedisKey[] { redisKey };
             hashEntry = new HashEntry(nameof(MonitorProcess.Id), key.ToString());
             hashEntryArray = new HashEntry[] { hashEntry };
-            server = Mock.Of<IServer>(x => x.Keys(0, "*", 10, CommandFlags.None) == redisKeys);
+            server = Mock.Of<IServer>(x => x.Keys(0, Moq.It.IsAny<RedisValue>(), 10, 0, 0, CommandFlags.None) == redisKeys);
             database = Mock.Of<IDatabase>(x => x.HashGetAllAsync(redisKey, CommandFlags.None) == Task.FromResult(hashEntryArray));
             serverProvider = Mock.Of<IRedisServerProvider>(x => x.Database == database && x.Server == server);
             repository = new Builder().WithRedisServerProvider(serverProvider).Build();
@@ -30,6 +29,9 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
 
         Because of = async () =>
                 await repository.GetAllAsync();
+
+        It should_get_all_keys_by_pattern_once = () =>
+                Mock.Get(serverProvider).Verify(x => x.Server.Keys(0, "*", 10, 0, 0, CommandFlags.None), Times.Once);
 
         It should_get_all_hash_keys_once = () =>
                 Mock.Get(serverProvider).Verify(x => x.Database.HashGetAllAsync(redisKey, CommandFlags.None), Times.Exactly(redisKeys.Count()));

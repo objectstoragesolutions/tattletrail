@@ -21,6 +21,5 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
         public MonitorRepository Build() {
             return new MonitorRepository(_redisServerProvider, _logger);
         }
-
     }
 }

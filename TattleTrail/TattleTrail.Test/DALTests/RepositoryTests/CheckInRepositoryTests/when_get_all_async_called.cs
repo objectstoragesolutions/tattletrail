@@ -13,15 +13,15 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
     [Subject(typeof(CheckInRepository))]
-    [Ignore("Rework")]
     public class when_get_all_async_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             key = fixture.Create<Guid>();
             redisKey = key.ToString();
             redisKeys = new RedisKey[] { redisKey };
-            serverProvider = Mock.Of<IRedisServerProvider> (x => x.Server.Keys(0, "checkinid:*", 10, CommandFlags.None) == redisKeys && 
-                             x.Database.HashGetAllAsync(Moq.It.IsAny<RedisKey>(), CommandFlags.None) == Task.FromResult( new HashEntry[] { }));
+            server = Mock.Of<IServer>(x => x.Keys(0, "checkinid:*", 10, 0, 0, CommandFlags.None) == redisKeys);
+            database = Mock.Of<IDatabase>(x => x.HashGetAllAsync(Moq.It.IsAny<RedisKey>(), CommandFlags.None) == Task.FromResult(new HashEntry[] { }));
+            serverProvider = Mock.Of<IRedisServerProvider> (x => x.Database == database && x.Server == server);
             repository = new Builder().WithRedisServerProvider(serverProvider).Build();
         };
 
@@ -29,13 +29,15 @@ namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
             await repository.GetAllAsync();
 
         It should_get_keys_by_pattern = () =>
-                Mock.Get(serverProvider).Verify(x => x.Server.Keys(0, "checkinid:*", 10, CommandFlags.None), Times.Once);
+                Mock.Get(serverProvider).Verify(x => x.Server.Keys(0, "checkinid:*", 10, 0, 0, CommandFlags.None), Times.Once);
 
         It should_call_get_async_n_times = () =>
                 Mock.Get(serverProvider).Verify(x => x.Database.HashGetAllAsync(redisKey, CommandFlags.None), Times.Exactly(redisKeys.Count()));
 
         static ICheckInRepository<CheckIn> repository;
         static IRedisServerProvider serverProvider;
+        static IDatabase database;
+        static IServer server;
         static IEnumerable<RedisKey> redisKeys;
         static RedisKey redisKey;
         static Guid key;
