@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  win: circleci/windows@1.0.0
+  win: circleci/windows@2.2.0
 
 jobs:
   build:
@@ -23,3 +23,27 @@ jobs:
       - run:
           name: "Run Build step"
           command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
+   test:
+     description: Setup and run application tests
+     executor:
+       name: win/vs2019
+     steps:
+       - checkout
+       - restore_cache:
+           keys:
+             - dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj" }}
+       - run:
+           name: "Install project dependencies"
+           command: dotnet.exe restore "TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj"
+       - save_cache:
+           paths:
+             - C:\Users\circleci\.nuget\packages
+           key: dotnet-packages-v1-{{ checksum ""TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj"" }}
+       - run:
+           name: "Run Application Tests"
+           command: dotnet.exe test -v n --results-directory:test_coverage --collect:"Code Coverage"
+       - run:
+           name: "Print Working Directory"
+           command: pwd
+       - store_artifacts:
+           path: C:\Users\circleci\project\test_coverage
