@@ -1,14 +1,13 @@
 version: 2.1
 
 orbs:
-  win: circleci/windows@1.0.0
+  win: circleci/windows@2.2.0
 
 jobs:
    test:
      description: Setup and run application tests
      executor:
-       name: win/vs2019
-       shell: powershell.exe
+       name: windows/default
      steps:
        - checkout
        - restore_cache:
@@ -31,8 +30,7 @@ jobs:
            path: C:\Users\circleci\project\test_coverage
 build:
     executor:
-      name: win/vs2019
-      shell: powershell.exe
+      name: windows/default
     steps:
       - checkout
       - restore_cache:
