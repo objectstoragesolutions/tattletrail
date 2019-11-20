@@ -13,13 +13,16 @@ jobs:
       - restore_cache:
           keys:
             - dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
+      - run:
+          name: "Install project dependencies"
+          command: dotnet.exe restore "TattleTrail/TattleTrail/TattleTrail.csproj"
       - save_cache:
           paths:
             - C:\Users\circleci\.nuget\packages
           key: dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
       - run:
           name: "Run Build step"
-          command: dotnet.exe publish -c Release -r win10-x64
+          command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -o /app/publish
       - run:
           name: "Test the executable"
           command: C:\Projects\tattletrail\TattleTrail\TattleTrail.Test\bin\Release\netcoreapp3.0\TattleTrail.exe
