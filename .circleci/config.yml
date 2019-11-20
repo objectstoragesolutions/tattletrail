@@ -28,25 +28,24 @@ jobs:
            command: pwd
        - store_artifacts:
            path: C:\Users\circleci\project\test_coverage
-build:
-    executor:
-      name: windows/default
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
-      - run:
-          name: "Install project dependencies"
-          command: dotnet.exe restore "TattleTrail/TattleTrail/TattleTrail.csproj"
-      - save_cache:
-          paths:
-            - C:\Users\circleci\.nuget\packages
-          key: dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
-      - run:
-          name: "Run Build step"
-          command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
-
+    build:
+     executor:
+       name: windows/default
+     steps:
+       - checkout
+       - restore_cache:
+           keys:
+             - dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
+       - run:
+           name: "Install project dependencies"
+           command: dotnet.exe restore "TattleTrail/TattleTrail/TattleTrail.csproj"
+       - save_cache:
+           paths:
+             - C:\Users\circleci\.nuget\packages
+           key: dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail/TattleTrail.csproj" }}
+       - run:
+           name: "Run Build step"
+           command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
 workflows:
   test_and_build:
     jobs:
