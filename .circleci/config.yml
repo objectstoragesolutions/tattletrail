@@ -28,7 +28,7 @@ jobs:
            command: pwd
        - store_artifacts:
            path: C:\Users\circleci\project\test_coverage
-    build:
+   build:
      executor:
        name: windows/default
      steps:
@@ -47,9 +47,9 @@ jobs:
            name: "Run Build step"
            command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
 workflows:
-  test_and_build:
-    jobs:
-      - test
-      - build:
+   test_and_build:
+     jobs:
+       - test
+       - build:
           requires:
             - test
