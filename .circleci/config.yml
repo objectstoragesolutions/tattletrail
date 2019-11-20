@@ -22,7 +22,7 @@ jobs:
            key: dotnet-packages-v1-{{ checksum "TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj" }}
        - run:
            name: "Run Application Tests"
-           command: dotnet.exe test -v n --results-directory:test_coverage --collect:"Code Coverage"
+           command: dotnet.exe test "TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj" -v n --results-directory:test_coverage --collect:"Code Coverage"
        - run:
            name: "Print Working Directory"
            command: pwd
