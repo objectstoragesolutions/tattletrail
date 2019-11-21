@@ -2,6 +2,11 @@ version: 2.1
 
 orbs:
   windows: circleci/windows@2.2.0
+  heroku: circleci/heroku@1.0.0
+workflows:
+  heroku_deploy::
+    jobs:
+      - deploy
 
 jobs:
    test:
