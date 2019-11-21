@@ -12,4 +12,4 @@ FROM publish AS final
 WORKDIR /app
 #EXPOSE 80
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "TattleTrail.dll"]
+CMD dotnet TattleTrail.dll
