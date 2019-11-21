@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   windows: circleci/windows@2.2.0
-  heroku: circleci/heroku@1.0.0
+  heroku: circleci/heroku@0.0.8
 
 jobs:
    test:
