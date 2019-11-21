@@ -47,6 +47,8 @@ jobs:
            name: "Run Build step"
            command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
    deploy:
+     executor:
+       name: heroku/default
      steps:
         - checkout
         - run:
