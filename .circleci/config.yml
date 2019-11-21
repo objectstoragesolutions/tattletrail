@@ -47,14 +47,12 @@ jobs:
            name: "Run Build step"
            command: dotnet.exe publish "TattleTrail/TattleTrail/TattleTrail.csproj" -c Release -r win10-x64
    deploy:
-     executor: #heroku buildpacks:set https://github.com/jincod/dotnetcore-buildpack
-        name: windows/default
      steps:
         - checkout
         - run:
             name: Deploy master to Heroku
             command: |
-                git push https://heroku:${apikey}@git.heroku.com/${solutionname}.git master
+                git push https://heroku:${API_KEY}@git.heroku.com/${SOLUTION_NAME}.git master
 workflows:
    version: 2
    test-build:
