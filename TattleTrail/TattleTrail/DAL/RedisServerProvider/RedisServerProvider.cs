@@ -19,7 +19,8 @@ namespace TattleTrail.DAL.RedisServerProvider {
         private String GetCertainEndpoint(int id) {
             var allEndpoints = _multiplexer.GetEndPoints();
             if (IndexOfArrayExists(allEndpoints, id)) {
-                return allEndpoints[id].ToString();
+                var endPoint = allEndpoints[id].ToString();
+                return endPoint.Substring(endPoint.IndexOf("/") + 1);
             }
             return String.Empty;
         }

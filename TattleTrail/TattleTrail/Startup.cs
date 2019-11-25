@@ -26,21 +26,23 @@ namespace TattleTrail {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             String connectionString = String.Empty;
-            if (CurrentEnvironment.IsDevelopment()) {
-                connectionString = Configuration.GetConnectionString("devconnection");
-            }
-
-            if (CurrentEnvironment.IsProduction()) {
-                connectionString = Configuration.GetConnectionString("prodconnection");
-            }
-
             var configurationOptions = new ConfigurationOptions {
                 AbortOnConnectFail = false,
                 ConnectRetry = 2,
                 ConnectTimeout = 5000,
-                SyncTimeout = 5000,
-                EndPoints = { connectionString }
+                SyncTimeout = 5000
             };
+
+            if (CurrentEnvironment.IsDevelopment()) {
+                connectionString = Configuration.GetConnectionString("devconnection");
+                configurationOptions.EndPoints.Add(connectionString);
+            }
+
+            if (CurrentEnvironment.IsProduction()) {
+                connectionString = Configuration.GetConnectionString("prodconnection");
+                configurationOptions.EndPoints.Add(connectionString);
+                configurationOptions.Password = "Zuw1z98xldiXSsJRo0JrNhsXcj0UndRb";
+            }
 
             services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
             services.AddScoped<IMonitorDetailsFactory, MonitorDetailsFactory>();
