@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
+using System;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
 using TattleTrail.Infrastructure.EmailService;
@@ -14,14 +15,33 @@ using TattleTrail.Models;
 
 namespace TattleTrail {
     public class Startup {
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) {
             Configuration = configuration;
+            CurrentEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        private IWebHostEnvironment CurrentEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            String connectionString = String.Empty;
+            if (CurrentEnvironment.IsDevelopment()) {
+                connectionString = Configuration.GetConnectionString("devconnection");
+            }
+
+            if (CurrentEnvironment.IsProduction()) {
+                connectionString = Configuration.GetConnectionString("prodconnection");
+            }
+
+            var configurationOptions = new ConfigurationOptions {
+                AbortOnConnectFail = false,
+                ConnectRetry = 2,
+                ConnectTimeout = 5000,
+                SyncTimeout = 5000,
+                EndPoints = { connectionString }
+            };
+
             services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
             services.AddScoped<IMonitorDetailsFactory, MonitorDetailsFactory>();
             services.AddSingleton<ICheckInModelFactory, CheckInModelFactory>();
@@ -31,13 +51,13 @@ namespace TattleTrail {
             services.AddSingleton<IRedisServerProvider, RedisServerProvider>();
             services.AddSingleton<IHostedService, MonitorsStatusService>();
             services.AddSingleton<IEmailService, EmailService>();
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configurationOptions));
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment()) {
+        public void Configure(IApplicationBuilder app) {
+            if (CurrentEnvironment.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
 
