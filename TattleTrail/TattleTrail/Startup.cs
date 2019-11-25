@@ -31,7 +31,7 @@ namespace TattleTrail {
             }
 
             if (CurrentEnvironment.IsProduction()) {
-                connectionString = Configuration.GetConnectionString("prodconnection");
+                connectionString = Environment.GetEnvironmentVariable("REDISCLOUD_URL");
             }
 
             var configurationOptions = new ConfigurationOptions {
