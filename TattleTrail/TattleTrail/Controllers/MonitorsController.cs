@@ -75,7 +75,7 @@ namespace TattleTrail.Controllers {
             }
         }
 
-        [HttpPost("{id}/checkin")]
+        [HttpGet("{id}/checkin")]
         public async Task<IActionResult> PostMonitorStatusAsync(Guid id) {
             try {
                 var monitor = await _monitorRepository.GetAsync(id.ToString());
