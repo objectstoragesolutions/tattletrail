@@ -14,7 +14,6 @@ namespace TattleTrail.Infrastructure.Extensions {
             HashEntry dateOfCreation = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.DateOfCreation));
             HashEntry lastCheckIn = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.LastCheckIn));
             HashEntry isDown = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.IsDown));
-            var test = JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value);
 
             MonitorProcess result = new MonitorProcess {
                 Id = Guid.Parse(monitorId),
