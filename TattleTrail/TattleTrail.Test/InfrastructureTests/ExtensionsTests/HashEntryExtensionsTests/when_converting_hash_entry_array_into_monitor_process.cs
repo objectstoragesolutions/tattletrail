@@ -10,6 +10,7 @@ using It = Machine.Specifications.It;
 namespace TattleTrail.Tests.InfrastructureTests.ExtensionsTests.HashEntryExtensionsTests {
 
     [Subject(typeof(HashEntryExtensions))]
+    [Ignore("rework")]
     public class when_converting_hash_entry_array_into_monitor_process {
         Establish _context = () => {
             Fixture fixture = new Fixture();
