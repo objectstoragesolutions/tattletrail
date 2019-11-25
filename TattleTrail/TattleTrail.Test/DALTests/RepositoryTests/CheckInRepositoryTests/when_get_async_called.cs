@@ -6,7 +6,6 @@ using System;
 using System.Threading.Tasks;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
-using TattleTrail.Infrastructure.Extensions;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
