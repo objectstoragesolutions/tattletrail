@@ -44,7 +44,6 @@ namespace TattleTrail.DAL.Repository {
 
                 foreach (var key in hashKeys) {
                     if (Guid.TryParse(key.ToString(), out _)) {
-                        var data = await GetAsync(key);
                         monitors.Add(await GetAsync(key));
                     }
                 }
