@@ -24,9 +24,6 @@ jobs:
        - run:
            name: "Run Application Tests"
            command: dotnet.exe test "TattleTrail/TattleTrail.Test/TattleTrail.Test.csproj" -v n --results-directory:test_coverage --collect:"Code Coverage"
-       - run:
-           name: "Print Working Directory"
-           command: pwd
        - store_artifacts:
            path: C:\Users\circleci\project\test_coverage
    build:

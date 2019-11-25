@@ -14,6 +14,7 @@ namespace TattleTrail.Infrastructure.Extensions {
             HashEntry dateOfCreation = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.DateOfCreation));
             HashEntry lastCheckIn = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.LastCheckIn));
             HashEntry isDown = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.IsDown));
+            var test = JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value);
 
             MonitorProcess result = new MonitorProcess {
                 Id = Guid.Parse(monitorId),
@@ -21,8 +22,8 @@ namespace TattleTrail.Infrastructure.Extensions {
                     ProcessName = processName.Value.HasValue ? processName.Value.ToString() : String.Empty,
                     IntervalTime = lifeTime.Value.HasValue ? (int)lifeTime.Value : 0,
                     Subscribers = subscribers.Value.HasValue ? JsonConvert.DeserializeObject<string[]>(subscribers.Value.ToString()) : new string[] { },
-                    DateOfCreation = dateOfCreation.Value.HasValue ? DateTime.Parse(dateOfCreation.Value) : DateTime.MinValue,
-                    LastCheckIn = lastCheckIn.Value.HasValue ? DateTime.Parse(lastCheckIn.Value) : DateTime.MinValue,
+                    DateOfCreation = dateOfCreation.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value) : DateTime.MinValue,
+                    LastCheckIn = lastCheckIn.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(lastCheckIn.Value) : DateTime.MinValue,
                     IsDown = isDown.Value.HasValue ? Boolean.Parse(isDown.Value) : false
                 }
             };
