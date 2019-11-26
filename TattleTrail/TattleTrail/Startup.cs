@@ -34,14 +34,14 @@ namespace TattleTrail {
             };
 
             if (CurrentEnvironment.IsDevelopment()) {
-                connectionString = Configuration.GetConnectionString("devconnection");
+                connectionString = Configuration["DEV_REDIS_URL"];
                 configurationOptions.EndPoints.Add(connectionString);
             }
 
             if (CurrentEnvironment.IsProduction()) {
-                connectionString = Configuration.GetConnectionString("prodconnection");
+                connectionString = Configuration["REDIS_URL"];
                 configurationOptions.EndPoints.Add(connectionString);
-                configurationOptions.Password = "Zuw1z98xldiXSsJRo0JrNhsXcj0UndRb";
+                configurationOptions.Password = Configuration["REDIS_PASS"];
             }
 
             services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
@@ -66,7 +66,7 @@ namespace TattleTrail {
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
