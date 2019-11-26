@@ -39,9 +39,9 @@ namespace TattleTrail {
             }
 
             if (CurrentEnvironment.IsProduction()) {
-                connectionString = Configuration["REDIS_URL"];
+                connectionString = Environment.GetEnvironmentVariable("REDIS_URL");
                 configurationOptions.EndPoints.Add(connectionString);
-                configurationOptions.Password = Configuration["REDIS_PASS"];
+                configurationOptions.Password = Environment.GetEnvironmentVariable("REDIS_PASS");
             }
 
             services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
