@@ -15,19 +15,22 @@ namespace TattleTrail.Infrastructure.Extensions {
             HashEntry lastCheckIn = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.LastCheckIn));
             HashEntry isDown = hashEntry.FirstOrDefault(x => x.Name == nameof(MonitorDetails.IsDown));
 
-            MonitorProcess result = new MonitorProcess {
-                Id = Guid.Parse(monitorId),
-                MonitorDetails = new MonitorDetails {
-                    ProcessName = processName.Value.HasValue ? processName.Value.ToString() : String.Empty,
-                    IntervalTime = lifeTime.Value.HasValue ? (int)lifeTime.Value : 0,
-                    Subscribers = subscribers.Value.HasValue ? JsonConvert.DeserializeObject<string[]>(subscribers.Value.ToString()) : new string[] { },
-                    DateOfCreation = dateOfCreation.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value) : DateTime.MinValue,
-                    LastCheckIn = lastCheckIn.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(lastCheckIn.Value) : DateTime.MinValue,
-                    IsDown = isDown.Value.HasValue ? Boolean.Parse(isDown.Value) : false
-                }
-            };
-
-            return result;
+            try {
+                MonitorProcess result = new MonitorProcess {
+                    Id = Guid.Parse(monitorId),
+                    MonitorDetails = new MonitorDetails {
+                        ProcessName = processName.Value.HasValue ? processName.Value.ToString() : String.Empty,
+                        IntervalTime = lifeTime.Value.HasValue ? (int)lifeTime.Value : 0,
+                        Subscribers = subscribers.Value.HasValue ? JsonConvert.DeserializeObject<string[]>(subscribers.Value.ToString()) : new string[] { },
+                        DateOfCreation = dateOfCreation.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value) : DateTime.MinValue,
+                        LastCheckIn = lastCheckIn.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(lastCheckIn.Value) : DateTime.MinValue,
+                        IsDown = isDown.Value.HasValue ? Boolean.Parse(isDown.Value) : false
+                    }
+                };
+                return result;
+            } catch (Exception ex) {
+                return new MonitorProcess();
+            }
         }
 
         public static CheckIn AsCheckInProcess(this HashEntry[] hashEntry, RedisKey checkedInKey) {
