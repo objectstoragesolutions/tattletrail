@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using TattleTrail.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace TattleTrail.Infrastructure.Extensions {
     public static class MonitorProcessModelExtensions {
@@ -13,6 +15,11 @@ namespace TattleTrail.Infrastructure.Extensions {
             var isDown = new HashEntry(nameof(monitor.MonitorDetails.IsDown), monitor.MonitorDetails.IsDown.ToString());
 
             return new HashEntry[] { processName, lifeTime, subscribers, dateOfCreation, checkedLastTime, isDown };
+        }
+
+        public static String GetCheckInApiString(this MonitorProcess monitor, HostString host, String scheme, PathString path) {
+            var checkInUrl = scheme + "://" + host + path + "/" + monitor.Id.ToString() + "/checkin";
+            return checkInUrl;
         }
     }
 }

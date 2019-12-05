@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using TattleTrail.DAL.Repository;
+using TattleTrail.Infrastructure.Extensions;
 using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 
@@ -56,8 +57,8 @@ namespace TattleTrail.Controllers {
             try {
                 var monitor = _monitorModelFactory.Create(details);
                 await _monitorRepository.CreateAsync(monitor);
-                
-                return Ok();
+                var result = monitor.GetCheckInApiString(Request.Host, Request.Scheme, Request.Path);
+                return Ok(result);
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside CreateMonitorAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");

@@ -24,7 +24,7 @@ namespace TattleTrail.Tests.MonitorsControllerTests {
             result = await _controller.CreateMonitorAsync(monitorDetails);
         
         It should_create_new_monitor = () => 
-            result.ShouldBeOfExactType(typeof(OkResult));
+            result.ShouldBeOfExactType(typeof(ObjectResult));
 
         static MonitorsController _controller;
         static MonitorDetails monitorDetails;
