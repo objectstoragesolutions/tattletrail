@@ -57,8 +57,8 @@ namespace TattleTrail.Controllers {
             try {
                 var monitor = _monitorModelFactory.Create(details);
                 await _monitorRepository.CreateAsync(monitor);
-                var result = monitor.GetCheckInApiString(Request.Host, Request.Scheme, Request.Path);
-                return Ok(result);
+                var result = monitor.GetResultJson(Request.Host, Request.Scheme, Request.Path);
+                return Ok(result.ToString());
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside CreateMonitorAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
