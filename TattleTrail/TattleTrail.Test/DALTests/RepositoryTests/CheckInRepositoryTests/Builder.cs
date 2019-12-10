@@ -4,7 +4,7 @@ using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
 using TattleTrail.Infrastructure.Factories;
 
-namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
+namespace TattleTrail.Test.DALTests.RepositoryTests.CheckInRepositoryTests {
     public class Builder {
         private IRedisServerProvider _redisServerProvider = Mock.Of<IRedisServerProvider>();
         private ICheckInModelFactory _modelFactory = Mock.Of<ICheckInModelFactory>();

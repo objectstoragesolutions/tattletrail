@@ -17,30 +17,35 @@ namespace TattleTrail.Infrastructure.Extensions {
 
             try {
                 MonitorProcess result = new MonitorProcess {
-                    Id = Guid.Parse(monitorId),
+                    Id = Guid.Parse(monitorId.ToString()),
                     MonitorDetails = new MonitorDetails {
                         ProcessName = processName.Value.HasValue ? processName.Value.ToString() : String.Empty,
-                        IntervalTime = lifeTime.Value.HasValue ? (int)lifeTime.Value : 0,
+                        IntervalTime = lifeTime.Value.HasValue ? (Int32)lifeTime.Value : 0,
                         Subscribers = subscribers.Value.HasValue ? JsonConvert.DeserializeObject<string[]>(subscribers.Value.ToString()) : new string[] { },
                         DateOfCreation = dateOfCreation.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value) : DateTime.MinValue,
                         LastCheckIn = lastCheckIn.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(lastCheckIn.Value) : DateTime.MinValue,
-                        IsDown = isDown.Value.HasValue ? Boolean.Parse(isDown.Value) : false
+                        IsDown = isDown.Value.HasValue ? (Boolean)isDown.Value : false
                     }
                 };
                 return result;
-            } catch (Exception ex) {
+            } catch {
                 return new MonitorProcess();
             }
         }
 
         public static CheckIn AsCheckInProcess(this HashEntry[] hashEntry, RedisKey checkedInKey) {
-            HashEntry monitorId = hashEntry.FirstOrDefault(x => x.Name == nameof(CheckIn.MonitorId));
-            var key = checkedInKey.ToString();
-            var croppedKey = key.Substring(key.LastIndexOf(":") + 1);
-            bool isValidGuid = Guid.TryParse(croppedKey, out var checkInId);
+            try {
+                HashEntry monitorId = hashEntry.FirstOrDefault(x => x.Name == nameof(CheckIn.MonitorId));
+                var key = checkedInKey.ToString();
+                var croppedKey = key.Substring(key.LastIndexOf(":") + 1);
+                bool isValidGuid = Guid.TryParse(croppedKey, out var checkInId);
 
-            //TODO: add check if guid is guid
-            return new CheckIn { CheckInId = checkInId, MonitorId = monitorId.Value.HasValue ? Guid.Parse(monitorId.Value) : Guid.Empty };
+                //TODO: add check if guid is guid
+                return new CheckIn { CheckInId = checkInId, MonitorId = monitorId.Value.HasValue ? Guid.Parse(monitorId.Value) : Guid.Empty };
+            } catch {
+                return new CheckIn();
+            }
+            
         }
     }
 }

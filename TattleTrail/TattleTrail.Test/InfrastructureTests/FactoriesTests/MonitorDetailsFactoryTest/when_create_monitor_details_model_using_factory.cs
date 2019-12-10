@@ -6,7 +6,7 @@ using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests.MonitorDetailsFactoryTest {
+namespace TattleTrail.Test.InfrastructureTests.FactoriesTests.MonitorDetailsFactoryTest {
     [Subject(typeof(MonitorDetailsFactory))]
     public class when_create_monitor_details_model_using_factory {
         Establish _context = () => {

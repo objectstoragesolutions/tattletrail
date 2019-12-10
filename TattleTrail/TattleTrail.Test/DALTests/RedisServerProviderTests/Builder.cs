@@ -2,7 +2,7 @@
 using StackExchange.Redis;
 using TattleTrail.DAL.RedisServerProvider;
 
-namespace TattleTrail.Tests.DALTests.RedisServerProviderTests {
+namespace TattleTrail.Test.DALTests.RedisServerProviderTests {
     public class Builder {
         private IConnectionMultiplexer _multiplexer = Mock.Of<IConnectionMultiplexer>();
 

@@ -9,7 +9,7 @@ using TattleTrail.DAL.Repository;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.MonitorsControllerTests {
+namespace TattleTrail.Test.MonitorsControllerTests {
     [Subject(typeof(MonitorsController))]
     public class when_getmonitorsasync_have_no_data_with_mentioned_id {
 

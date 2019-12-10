@@ -15,7 +15,7 @@ namespace TattleTrail.Controllers {
         private readonly IMonitorRepository<MonitorProcess> _monitorRepository;
         private readonly ICheckInRepository<CheckIn> _checkInRepository;
         private readonly IMonitorModelFactory _monitorModelFactory;
-        public MonitorsController(ILogger<MonitorsController> logger, 
+        public MonitorsController(ILogger<MonitorsController> logger,
             IMonitorModelFactory modelFactory,
             IMonitorRepository<MonitorProcess> monitorRepository,
             ICheckInRepository<CheckIn> checkInRepository) {
@@ -53,7 +53,7 @@ namespace TattleTrail.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) { 
+        public async Task<IActionResult> CreateMonitorAsync(MonitorDetails details) {
             try {
                 var monitor = _monitorModelFactory.Create(details);
                 await _monitorRepository.CreateAsync(monitor);
@@ -61,6 +61,23 @@ namespace TattleTrail.Controllers {
                 return Ok(result.ToString());
             } catch (Exception ex) {
                 _logger.LogError($"Something went wrong inside CreateMonitorAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMonitorAsync(Guid id, MonitorDetails details) {
+            try {
+                var monitor = await _monitorRepository.GetAsync(id.ToString());
+                if (id.Equals(monitor.Id)) {
+                    monitor.MonitorDetails.UpdateMonitorDetails(details);
+                    await _monitorRepository.CreateAsync(monitor);
+                    return NoContent();
+                }
+
+                return NotFound();
+            } catch (Exception ex) {
+                _logger.LogError($"Something went wrong inside UpdateMonitorAsync: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }

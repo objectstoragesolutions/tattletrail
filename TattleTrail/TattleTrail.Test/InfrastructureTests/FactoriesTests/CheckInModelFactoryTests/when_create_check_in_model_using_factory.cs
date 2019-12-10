@@ -6,7 +6,7 @@ using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests.CheckInModelFactoryTests {
+namespace TattleTrail.Test.InfrastructureTests.FactoriesTests.CheckInModelFactoryTests {
     [Subject(typeof(CheckInModelFactory))]
     public class when_create_check_in_model_using_factory {
         Establish _context = () => {

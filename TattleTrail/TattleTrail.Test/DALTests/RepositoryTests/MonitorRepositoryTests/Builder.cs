@@ -3,7 +3,7 @@ using Moq;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
 
-namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
+namespace TattleTrail.Test.DALTests.RepositoryTests.MonitorRepositoryTests {
     public class Builder {
         private IRedisServerProvider _redisServerProvider = Mock.Of<IRedisServerProvider>();
         private ILogger<MonitorRepository> _logger = Mock.Of<ILogger<MonitorRepository>>();

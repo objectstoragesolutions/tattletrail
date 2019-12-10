@@ -1,7 +1,7 @@
 ﻿using Moq;
 using TattleTrail.Infrastructure.Factories;
 
-namespace TattleTrail.Tests.InfrastructureTests.FactoriesTests.MonitorModelFactoryTests {
+namespace TattleTrail.Test.InfrastructureTests.FactoriesTests.MonitorModelFactoryTests {
     public class Builder {
 
         private IMonitorDetailsFactory _factory = Mock.Of<IMonitorDetailsFactory>();

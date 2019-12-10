@@ -9,7 +9,7 @@ using TattleTrail.DAL.Repository;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.DALTests.RepositoryTests.MonitorRepositoryTests {
+namespace TattleTrail.Test.DALTests.RepositoryTests.MonitorRepositoryTests {
     [Subject(typeof(MonitorRepository))]
     public class when_get_async_called {
         Establish _context = () => {

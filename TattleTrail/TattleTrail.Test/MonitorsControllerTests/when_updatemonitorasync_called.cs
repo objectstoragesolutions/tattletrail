@@ -10,20 +10,18 @@ using It = Machine.Specifications.It;
 
 namespace TattleTrail.Test.MonitorsControllerTests {
     [Subject(typeof(MonitorsController))]
-    public class when_createmonitorasync_called {
+    public class when_updatemonitorasync_called {
         Establish _context = () => {
             Fixture fixture = new Fixture();
             monitorDetails = fixture.Create<MonitorDetails>();
             _factory = Mock.Of<IMonitorModelFactory>(x => x.Create(monitorDetails) == new MonitorProcess());
             _repository = Mock.Of<IMonitorRepository<MonitorProcess>>();
-            _controller = new Builder().WithModelFactory(_factory).WithMonitorRepository(_repository).Build();
+            //_controller = new ()
+            
         };
-        Because of = async () => 
-            result = await _controller.CreateMonitorAsync(monitorDetails);
-        
-        It should_create_new_monitor = () => 
-            result.ShouldBeOfExactType(typeof(ObjectResult));
-
+        Because of = () => { };
+        It should_do_smthg = () => { };
+		    
         static MonitorsController _controller;
         static MonitorDetails monitorDetails;
         static IMonitorRepository<MonitorProcess> _repository;

@@ -11,7 +11,7 @@ using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.DALTests.RepositoryTests.CheckInRepositoryTests {
+namespace TattleTrail.Test.DALTests.RepositoryTests.CheckInRepositoryTests {
     [Subject(typeof(CheckInRepository))]
     public class when_create_async_called {
         Establish _context = () => {

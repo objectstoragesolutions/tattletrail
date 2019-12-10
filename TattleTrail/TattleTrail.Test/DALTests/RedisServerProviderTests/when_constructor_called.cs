@@ -6,7 +6,7 @@ using System.Net;
 using TattleTrail.DAL.RedisServerProvider;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.DALTests.RedisServerProviderTests {
+namespace TattleTrail.Test.DALTests.RedisServerProviderTests {
     [Subject(typeof(RedisServerProvider))]
     public class when_constructor_called {
         Establish _context = () => {

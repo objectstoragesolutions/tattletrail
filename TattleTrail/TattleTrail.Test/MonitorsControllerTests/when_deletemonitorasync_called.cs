@@ -8,7 +8,7 @@ using TattleTrail.DAL.Repository;
 using TattleTrail.Models;
 using It = Machine.Specifications.It;
 
-namespace TattleTrail.Tests.MonitorsControllerTests {
+namespace TattleTrail.Test.MonitorsControllerTests {
     [Subject(typeof(MonitorsController))]
     public class when_deletemonitorasync_called {
         Establish _context = () => {

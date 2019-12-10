@@ -2,11 +2,10 @@
 using Moq;
 using TattleTrail.Controllers;
 using TattleTrail.DAL.Repository;
-using TattleTrail.Infrastructure.EmailService;
 using TattleTrail.Infrastructure.Factories;
 using TattleTrail.Models;
 
-namespace TattleTrail.Tests.MonitorsControllerTests {
+namespace TattleTrail.Test.MonitorsControllerTests {
     public class Builder {
         private ILogger<MonitorsController> _logger = Mock.Of<ILogger<MonitorsController>>();
         private IMonitorModelFactory _factoryModel = Mock.Of<IMonitorModelFactory>();
