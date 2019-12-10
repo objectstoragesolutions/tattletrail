@@ -17,7 +17,7 @@ Service to detect outages from background processes and services
 
 ### Update monitor:
 
-![#03a9fc](https://placehold.it/15/006400/000000?text=+) **PUT**  ```/api/v1/monitors/{monitorid}``` - updates monitor details.
+![#03a9fc](https://placehold.it/15/03a9fc/000000?text=+) **PUT**  ```/api/v1/monitors/{monitorid}``` - updates monitor details.
 
 This call should contain body.
 Example:
