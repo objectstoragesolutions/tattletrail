@@ -13,7 +13,8 @@ Service to detect outages from background processes and services
 
 This call should contain body. Example:
 
-```{
+```
+{
     "processname": "Process name",
     "intervaltime": 120,
     "subscribers": [
@@ -21,6 +22,16 @@ This call should contain body. Example:
         "test2@email.com"
     ]
 }
+```
+
+Response:
+
+```
+{
+  "monitorid": "guid_monitor_id",
+  "checkinurl": "http://somehost/api/v1/monitors/{monitorid}/checkin"
+}
+
 ```
 
 ### Delete monitor:
