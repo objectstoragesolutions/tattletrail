@@ -19,7 +19,12 @@ namespace TattleTrail.Infrastructure.Extensions {
         }
 
         public static JObject GetResultJson(this MonitorProcess monitor, HostString host, String scheme, PathString path) {
-            var checkInUrl = scheme + "://" + host + path + "/" + monitor.Id.ToString() + "/checkin";
+            var pathValue = path.HasValue ? path.Value : String.Empty;
+            var hostValue = host.HasValue ? host.Value : String.Empty;
+            if (!pathValue.EndsWith("/")) {
+                pathValue += "/";
+            }
+            var checkInUrl = scheme + "://" + hostValue + pathValue + monitor.Id.ToString() + "/checkin";
             var result = new { monitorid = monitor.Id, checkinurl = checkInUrl };
             return JObject.FromObject(result);
         }
