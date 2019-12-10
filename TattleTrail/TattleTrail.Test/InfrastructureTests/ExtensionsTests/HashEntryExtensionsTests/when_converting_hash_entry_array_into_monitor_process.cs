@@ -25,7 +25,7 @@ namespace TattleTrail.Test.InfrastructureTests.ExtensionsTests.HashEntryExtensio
             var subscribers = new HashEntry(nameof(MonitorDetails.Subscribers), JsonConvert.SerializeObject(expectedAmountOfSubscribers));
             var dateOfCreation = new HashEntry(nameof(MonitorDetails.DateOfCreation), JsonConvert.SerializeObject(expectedDateOfCreation));
             var lastCheckIn = new HashEntry(nameof(MonitorDetails.LastCheckIn), JsonConvert.SerializeObject(expectedLastCheckIn));
-            var isDown = new HashEntry(nameof(MonitorDetails.IsDown), (Boolean)expectedIsDown);
+            var isDown = new HashEntry(nameof(MonitorDetails.IsDown), expectedIsDown.ToString());
             hashEntry = new HashEntry[] { processName, lifeTime, subscribers, dateOfCreation, lastCheckIn, isDown };
 
         };

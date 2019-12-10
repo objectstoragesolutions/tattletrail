@@ -19,12 +19,12 @@ namespace TattleTrail.Infrastructure.Extensions {
                 MonitorProcess result = new MonitorProcess {
                     Id = Guid.Parse(monitorId.ToString()),
                     MonitorDetails = new MonitorDetails {
-                        ProcessName = processName.Value.HasValue ? processName.Value.ToString() : String.Empty,
-                        IntervalTime = lifeTime.Value.HasValue ? (Int32)lifeTime.Value : 0,
-                        Subscribers = subscribers.Value.HasValue ? JsonConvert.DeserializeObject<string[]>(subscribers.Value.ToString()) : new string[] { },
+                        ProcessName = processName.Value.HasValue ? Convert.ToString(processName.Value) : String.Empty,
+                        IntervalTime = lifeTime.Value.HasValue ? Convert.ToInt32(lifeTime.Value) : 0,
+                        Subscribers = subscribers.Value.HasValue ? JsonConvert.DeserializeObject<string[]>(Convert.ToString(subscribers.Value)) : new string[] { },
                         DateOfCreation = dateOfCreation.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(dateOfCreation.Value) : DateTime.MinValue,
                         LastCheckIn = lastCheckIn.Value.HasValue ? JsonConvert.DeserializeObject<DateTime>(lastCheckIn.Value) : DateTime.MinValue,
-                        IsDown = isDown.Value.HasValue ? (Boolean)isDown.Value : false
+                        IsDown = isDown.Value.HasValue ? Convert.ToBoolean(isDown.Value) : false
                     }
                 };
                 return result;
@@ -39,9 +39,10 @@ namespace TattleTrail.Infrastructure.Extensions {
                 var key = checkedInKey.ToString();
                 var croppedKey = key.Substring(key.LastIndexOf(":") + 1);
                 bool isValidGuid = Guid.TryParse(croppedKey, out var checkInId);
-
-                //TODO: add check if guid is guid
-                return new CheckIn { CheckInId = checkInId, MonitorId = monitorId.Value.HasValue ? Guid.Parse(monitorId.Value) : Guid.Empty };
+                if (isValidGuid) {
+                    return new CheckIn { CheckInId = checkInId, MonitorId = monitorId.Value.HasValue ? Guid.Parse(monitorId.Value) : Guid.Empty };
+                }
+                return new CheckIn();
             } catch {
                 return new CheckIn();
             }
