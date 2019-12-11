@@ -1,16 +1,33 @@
 version: '3.4'
 
+networks:
+  app-tier:
+    driver: bridge
+
 services:
   tattletrail:
     image: ${DOCKER_REGISTRY-}tattletrail
     build:
       context: TattleTrail/
       dockerfile: Dockerfile
-    ports:
-      - "6379:6379"
+    environment:
+      - SMTP_CLIENT=${SMTP_CLIENT},
+      - SMTP_PORT=${SMTP_PORT},
+      - SMTP_LOGIN=${SMTP_LOGIN},
+      - SMTP_PASS=${SMTP_PASS},
+      - SMTP_EMAIL_ADDRESS=${SMTP_EMAIL_ADDRESS},
+      - SMTP_EMAIL_NAME=${SMTP_EMAIL_NAME}
+      - Redis_URL=${Redis_URL}
+      - Redis_PASS=${Redis_PASS}
     depends_on:
       - db
     container_name: tattletrail
+    networks:
+      - app-tier
   db:
-    image: redis
+    image: 'bitnami/redis:latest'
     container_name: redis-image
+    ports:
+      - "6379:6379"
+    networks:
+      - app-tier

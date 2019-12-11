@@ -10,6 +10,5 @@ RUN dotnet publish "TattleTrail.csproj" -c Release -o /app/publish
 
 FROM publish AS final
 WORKDIR /app
-#EXPOSE 80
 COPY --from=publish /app/publish .
 CMD dotnet TattleTrail.dll
