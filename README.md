@@ -1,6 +1,9 @@
 # Tattletrail
 Service to detect outages from background processes and services
 
+## How to deploy:
+
+[How to deploy wiki page](https://github.com/objectstoragesolutions/tattletrail/wiki/How-to-deploy.)
 
 ## Endpoints:
 
