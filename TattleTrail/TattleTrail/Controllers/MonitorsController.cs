@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using TattleTrail.Models;
 namespace TattleTrail.Controllers {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class MonitorsController : ControllerBase {
         private readonly ILogger<MonitorsController> _logger;
         private readonly IMonitorRepository<MonitorProcess> _monitorRepository;

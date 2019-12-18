@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System;
+using System.Text;
 using TattleTrail.DAL.RedisServerProvider;
 using TattleTrail.DAL.Repository;
 using TattleTrail.Infrastructure.EmailService;
@@ -44,6 +47,9 @@ namespace TattleTrail {
                 configurationOptions.Password = Environment.GetEnvironmentVariable("REDIS_PASS");
             }
 
+            var sharedKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(Configuration["SIGNING_KEY"]));
+
             services.AddScoped<IMonitorModelFactory, MonitorModelFactory>();
             services.AddScoped<IMonitorDetailsFactory, MonitorDetailsFactory>();
             services.AddSingleton<ICheckInModelFactory, CheckInModelFactory>();
@@ -53,7 +59,23 @@ namespace TattleTrail {
             services.AddSingleton<IRedisServerProvider, RedisServerProvider>();
             services.AddSingleton<IHostedService, MonitorsStatusService>();
             services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configurationOptions));
+            services.AddAuthentication(x => { 
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;}
+            ).AddJwtBearer(options => {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    IssuerSigningKey = sharedKey,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidAudience = Configuration["VALID_AUDIENCE"],
+                    ValidIssuer = Configuration["VALID_ISSUER"],
+                    ValidateAudience = true
+                };
+            });
             services.AddControllers();
         }
 
@@ -64,7 +86,7 @@ namespace TattleTrail {
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseRouting();
             
             app.UseAuthorization();
