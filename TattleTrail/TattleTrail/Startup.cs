@@ -73,7 +73,8 @@ namespace TattleTrail {
                     ValidateIssuer = true,
                     ValidAudience = Configuration["VALID_AUDIENCE"],
                     ValidIssuer = Configuration["VALID_ISSUER"],
-                    ValidateAudience = true
+                    ValidateAudience = true,
+                    RequireExpirationTime = false
                 };
             });
             services.AddControllers();
