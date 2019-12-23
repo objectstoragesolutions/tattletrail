@@ -36,16 +36,8 @@ namespace TattleTrail {
                 SyncTimeout = 5000
             };
 
-            if (CurrentEnvironment.IsDevelopment()) {
-                connectionString = Configuration["DEV_REDIS_URL"];
-                configurationOptions.EndPoints.Add(connectionString);
-            }
-
-            if (CurrentEnvironment.IsProduction()) {
-                connectionString = Environment.GetEnvironmentVariable("REDIS_URL");
-                configurationOptions.EndPoints.Add(connectionString);
-                configurationOptions.Password = Environment.GetEnvironmentVariable("REDIS_PASS");
-            }
+            connectionString = Configuration["REDIS_URL"];
+            configurationOptions.EndPoints.Add(connectionString);
 
             var sharedKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(Configuration["SIGNING_KEY"]));

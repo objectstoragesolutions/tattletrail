@@ -21,21 +21,14 @@ namespace TattleTrail.Infrastructure.EmailService {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(IConfiguration));
             _currentEnvironment = env ?? throw new ArgumentNullException(nameof(IWebHostEnvironment));
 
-            _smtpCredentials = _currentEnvironment.IsDevelopment() ? new SmtpDataModel {
+            _smtpCredentials = new SmtpDataModel {
                 EmailName = _configuration["SMTP_EMAIL_NAME"],
                 EmailAddress = _configuration["SMTP_EMAIL_ADDRESS"],
                 Client = _configuration["SMTP_CLIENT"],
                 Port = Int32.Parse(_configuration["SMTP_PORT"]),
                 Login = _configuration["SMTP_LOGIN"],
                 Password = _configuration["SMTP_PASS"]
-            } : new SmtpDataModel {
-                EmailName = Environment.GetEnvironmentVariable("SMTP_EMAIL_NAME"),
-                EmailAddress = Environment.GetEnvironmentVariable("SMTP_EMAIL_ADDRESS"),
-                Client = Environment.GetEnvironmentVariable("SMTP_CLIENT"),
-                Port = Int32.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")),
-                Login = Environment.GetEnvironmentVariable("SMTP_LOGIN"),
-                Password = Environment.GetEnvironmentVariable("SMTP_PASS")
-            };
+            } ;
         }
 
         public async Task SendEmailAsync(String[] subscribers, String subject, String message) {
