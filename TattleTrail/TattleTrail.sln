@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TattleTrail", "TattleTrail\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TattleTrail.Test", "TattleTrail.Test\TattleTrail.Test.csproj", "{07CB7857-3FBB-4539-9EB5-AF4721BD2226}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{83A66242-F50E-449D-A28A-7DD1670C1991}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{07CB7857-3FBB-4539-9EB5-AF4721BD2226}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07CB7857-3FBB-4539-9EB5-AF4721BD2226}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07CB7857-3FBB-4539-9EB5-AF4721BD2226}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83A66242-F50E-449D-A28A-7DD1670C1991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83A66242-F50E-449D-A28A-7DD1670C1991}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83A66242-F50E-449D-A28A-7DD1670C1991}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83A66242-F50E-449D-A28A-7DD1670C1991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

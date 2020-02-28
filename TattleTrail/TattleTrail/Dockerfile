@@ -1,14 +1,20 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY TattleTrail.csproj .
 RUN dotnet restore "TattleTrail.csproj"
 COPY . .
-RUN dotnet build "TattleTrail.csproj" -c Release -o /app/build
+WORKDIR /src
+RUN dotnet build "TattleTrail.csproj" -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish "TattleTrail.csproj" -c Release -o /app/publish
+RUN dotnet publish "TattleTrail.csproj" -c Release -o /app
 
-FROM publish AS final
+FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app .
 CMD dotnet TattleTrail.dll
