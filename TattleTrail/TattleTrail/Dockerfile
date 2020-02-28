@@ -8,7 +8,7 @@ WORKDIR /src
 COPY TattleTrail.csproj .
 RUN dotnet restore TattleTrail.csproj
 COPY . .
-WORKDIR src
+WORKDIR /src
 RUN dotnet build "TattleTrail.csproj" -c Release -o /app
 
 FROM build AS publish
